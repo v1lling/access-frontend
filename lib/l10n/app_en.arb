@@ -1,0 +1,21 @@
+{
+    "landing": "Tap to Scan",
+
+    "userinfo_headline": "Please fill in your contact details",
+
+    "givenname": "Given name",
+    "familyname": "Family name",
+    "street": "Street and number",
+    "postalcode": "Postal code",
+    "town": "Town",
+    "mobilenumber": "Mobile phone number"
+    ,
+    "save": "Save",
+    "back": "Back",
+    "cancel": "Cancel",
+
+    "checkin": "Check-In",
+    "checkout_time": "Intend to be present until"
+
+
+}

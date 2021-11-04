@@ -1,0 +1,19 @@
+{
+    "landing": "Tap to Scan",
+
+    "userinfo_headline": "Bitte geben Sie ihre Kontaktdaten an",
+    "givenname": "Vorname",
+    "familyname": "Nachname",
+    "street": "Straße und Hausnummer",
+    "postalcode": "Postleitzahl",
+    "town": "Ort",
+    "mobilenumber": "Mobilfunknummer",
+
+    "save": "Speichern",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+
+    "checkin": "Check-In",
+    "checkout_time": "Anwesenheit geplant bis"
+
+}
