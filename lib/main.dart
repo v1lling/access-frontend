@@ -34,13 +34,7 @@ Future main() async {
       ChangeNotifierProvider(
         create: (context) => ThemeService(darkMode),
       ),
-      ChangeNotifierProvider(
-          create: (context) => LocaleService(language[0] == null
-              ? (!(Platform.localeName.split('_')[0] == 'en' ||
-                      Platform.localeName.split('_')[0] == 'de')
-                  ? Locale('en')
-                  : Locale(Platform.localeName.split('_')[0]))
-              : Locale(language[0]!)))
+      ChangeNotifierProvider(create: (context) => LocaleService(Locale('en')))
     ], child: Fluttify(preferences)),
   ));
 }
