@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:async';
 import 'package:access/app/fluttify_router.router.dart';
 import 'package:access/app/locator.dart';
@@ -6,6 +5,9 @@ import 'package:access/l10n/l10n.dart';
 import 'package:access/services/dynamic_link_service.dart';
 import 'package:access/services/locale_service.dart';
 import 'package:access/services/theme_service.dart';
+import 'package:access/ui/views/checkin/checkin_view.dart';
+import 'package:access/ui/views/landing/landing_view.dart';
+import 'package:access/ui/views/userinfo_view.dart/userinfo_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -72,23 +74,51 @@ class App extends StatelessWidget {
         return Consumer<ThemeService>(
           builder: (context, notifire, child) {
             return MaterialApp(
-              locale: localeService.locale,
-              supportedLocales: L10n.all,
-              localizationsDelegates: [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate
-              ],
-              title: 'Access',
-              theme: notifire.getTheme(),
-              initialRoute: Routes.landingView,
-              navigatorKey: StackedService.navigatorKey,
-              onGenerateRoute: StackedRouter().onGenerateRoute,
-            );
+                locale: localeService.locale,
+                supportedLocales: L10n.all,
+                localizationsDelegates: [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate
+                ],
+                title: 'Access',
+                theme: notifire.getTheme(),
+                initialRoute: "/",
+                // navigatorKey: StackedService.navigatorKey,
+                /*
+                routes: {
+                  "/": (context) => LandingView(),
+                  //"/checkin": (context) => CheckInView()
+                },
+                */
+                onGenerateRoute: RouteGenerator.generateRoute);
           },
         );
       },
     );
+  }
+}
+
+class RouteGenerator {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    Uri settingsUri = Uri.parse(settings.name!);
+    print(settingsUri.path);
+    Widget? pageView;
+    switch (settingsUri.path) {
+      case "/checkin":
+        String? roomId = settingsUri.queryParameters["room"];
+        if (roomId != null) {
+          pageView = CheckInView(roomId: roomId);
+        }
+        break;
+      case "/user":
+        pageView = UserInfoView();
+        break;
+      default:
+        pageView = LandingView();
+    }
+    return MaterialPageRoute(
+        builder: (context) => pageView!, settings: settings);
   }
 }

@@ -116,7 +116,6 @@ class UserInfoView extends StatelessWidget {
                                           ),
                                         ),
                                         validator: (value) {
-                                          print(value);
                                           return UserInfoValidator.validate(
                                               value,
                                               AppLocalizations.of(context)!

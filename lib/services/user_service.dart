@@ -8,7 +8,6 @@ class UserService {
   UserService() {
     SharedPreferences.getInstance().then((prefs) {
       var userJson = prefs.getString("userinfo");
-      print(userJson);
       this.user = User.fromJson(json.decode(userJson!));
     });
   }
