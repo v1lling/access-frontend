@@ -396,6 +396,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.3+1"
+  flutter_nfc_plugin:
+    dependency: "direct main"
+    description:
+      name: flutter_nfc_plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   flutter_phoenix:
     dependency: "direct main"
     description:

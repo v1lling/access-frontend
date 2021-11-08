@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart';
 
 class User extends Equatable {
   User(
@@ -44,6 +45,15 @@ class User extends Equatable {
         "town": town,
         "mobilenumber": mobilenumber
       };
+
+  bool isUserInfoComplete() {
+    return givenname != null &&
+        familyname != null &&
+        street != null &&
+        postalcode != null &&
+        town != null &&
+        mobilenumber != null;
+  }
 
   @override
   List<Object> get props =>

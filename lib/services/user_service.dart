@@ -5,11 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserService {
   User? user;
 
-  UserService() {
-    SharedPreferences.getInstance().then((prefs) {
-      var userJson = prefs.getString("userinfo");
-      this.user = User.fromJson(json.decode(userJson!));
-    });
+  Future<bool> initializeUserService() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userJson = await prefs.getString("userinfo");
+    if (userJson != null) {
+      this.user = User.fromJson(json.decode(userJson));
+      return true;
+    }
+    return false;
   }
 
   Future<bool> saveUser(User user) async {

@@ -76,15 +76,24 @@ class CheckInView extends StatelessWidget {
                                       onPressed: () {
                                         model.selectCheckOutTime(context);
                                       },
-                                      child: Text(
-                                          model.checkOutTime!.hour.toString() +
-                                              ":" +
-                                              model.checkOutTime!.minute
-                                                  .toString(),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline1!
-                                              .copyWith(color: Colors.blue)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                              model.checkOutTime!.hour
+                                                      .toString() +
+                                                  ":" +
+                                                  model.checkOutTime!.minute
+                                                      .toString(),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1!
+                                                  .copyWith(
+                                                      color: Colors.blue)),
+                                          Icon(Icons.edit, color: Colors.blue)
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -110,17 +119,17 @@ class CheckInView extends StatelessWidget {
                                             foregroundColor:
                                                 MaterialStateProperty.all<
                                                     Color>(Colors.white),
-                                            backgroundColor:
-                                                model.userService.user !=
-                                                        null
-                                                    ? MaterialStateProperty.all<
-                                                        Color>(Colors.green)
-                                                    : MaterialStateProperty.all<
-                                                        Color>(Colors.grey)),
-                                        onPressed:
-                                            model.userService.user != null
-                                                ? model.checkInUser
-                                                : null),
+                                            backgroundColor: model
+                                                    .userService.user!
+                                                    .isUserInfoComplete()
+                                                ? MaterialStateProperty.all<
+                                                    Color>(Colors.green)
+                                                : MaterialStateProperty.all<
+                                                    Color>(Colors.grey)),
+                                        onPressed: model.userService.user!
+                                                .isUserInfoComplete()
+                                            ? model.checkInUser
+                                            : null),
                                   ),
                                 ),
                               )
