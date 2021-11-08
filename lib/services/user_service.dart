@@ -3,7 +3,7 @@ import 'package:access/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
-  User? user;
+  User? user = User.empty();
 
   Future<bool> initializeUserService() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
