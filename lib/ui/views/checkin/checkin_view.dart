@@ -1,5 +1,6 @@
 import 'package:access/ui/views/checkin/checkin_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -37,7 +38,9 @@ class CheckInView extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(right: 16.0),
                                 child: Text(
-                                    AppLocalizations.of(context)!.checkin,
+                                    AppLocalizations.of(context)!.checkin +
+                                        ": " +
+                                        this.roomId!,
                                     style:
                                         Theme.of(context).textTheme.headline2),
                               ),
@@ -46,12 +49,15 @@ class CheckInView extends StatelessWidget {
                       Expanded(
                         child: Container(
                           width: size.width,
-                          padding: const EdgeInsets.only(top: 16, bottom: 16),
+                          padding: const EdgeInsets.only(
+                              top: 16, bottom: 32, left: 24, right: 24),
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                            color: Colors.white,
+                            /*
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(36),
-                                  topLeft: Radius.circular(36))),
+                                  topLeft: Radius.circular(36))*/
+                          ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.max,
@@ -60,40 +66,97 @@ class CheckInView extends StatelessWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(this.roomId!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                            AppLocalizations.of(context)!
+                                                .userinfo,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline1),
+                                        TextButton(
+                                          style: TextButton.styleFrom(
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                          ),
+                                          onPressed: () {
+                                            model.navigateToUserInfoView(
+                                                context);
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                  model.userService.user!
+                                                          .givenname ??
+                                                      "Unknown",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline1!
+                                                      .copyWith(
+                                                          color: model
+                                                                      .userService
+                                                                      .user!
+                                                                      .givenname !=
+                                                                  null
+                                                              ? Colors.blue
+                                                              : Colors.red)),
+                                              SizedBox(width: 4),
+                                              Icon(Icons.edit,
+                                                  color: Colors.blue)
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                     SizedBox(height: 30),
                                     //Check-Out Time
-                                    Text(
-                                        AppLocalizations.of(context)!
-                                            .checkout_time,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline1),
-                                    TextButton(
-                                      onPressed: () {
-                                        model.selectCheckOutTime(context);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                              model.checkOutTime!.hour
-                                                      .toString() +
-                                                  ":" +
-                                                  model.checkOutTime!.minute
-                                                      .toString(),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline1!
-                                                  .copyWith(
-                                                      color: Colors.blue)),
-                                          Icon(Icons.edit, color: Colors.blue)
-                                        ],
-                                      ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                            AppLocalizations.of(context)!
+                                                .checkout_time,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline1),
+                                        TextButton(
+                                          style: TextButton.styleFrom(
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                          ),
+                                          onPressed: () {
+                                            model.selectCheckOutTime(context);
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  DateFormat('kk:mm').format(
+                                                      model.checkOutTime!),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline1!
+                                                      .copyWith(
+                                                          color: Colors.blue)),
+                                              SizedBox(width: 4),
+                                              Icon(Icons.edit,
+                                                  color: Colors.blue)
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -104,6 +167,7 @@ class CheckInView extends StatelessWidget {
                                   alignment: Alignment.bottomCenter,
                                   child: Container(
                                     width: size.width * 0.5,
+                                    height: 50,
                                     child: TextButton(
                                         child: Row(
                                           mainAxisAlignment:

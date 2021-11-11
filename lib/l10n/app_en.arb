@@ -3,6 +3,7 @@
 
     "userinfo_headline": "Please fill in your contact details",
 
+    "userinfo": "Contact details:",
     "givenname": "Given name",
     "familyname": "Family name",
     "street": "Street and number",
@@ -15,7 +16,7 @@
     "cancel": "Cancel",
 
     "checkin": "Check-In",
-    "checkout_time": "Intend to be present until"
+    "checkout_time": "Present until:"
 
 
 }

@@ -2,6 +2,8 @@
     "landing": "Tap to Scan",
 
     "userinfo_headline": "Bitte geben Sie ihre Kontaktdaten an",
+
+    "userinfo": "Kontaktdaten:",
     "givenname": "Vorname",
     "familyname": "Nachname",
     "street": "Straße und Hausnummer",
@@ -14,6 +16,6 @@
     "cancel": "Abbrechen",
 
     "checkin": "Check-In",
-    "checkout_time": "Anwesenheit geplant bis"
+    "checkout_time": "Anwesend bis:"
 
 }

@@ -1,7 +1,10 @@
 import 'package:access/app/locator.dart';
 import 'package:access/services/access_backend_service.dart';
 import 'package:access/services/user_service.dart';
+import 'package:access/ui/views/userinfo_view.dart/userinfo_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stacked/stacked.dart';
 
@@ -17,11 +20,25 @@ class CheckInViewModel extends BaseViewModel {
     this.roomId = roomId;
   }
 
+  @override
+  void dispose() {
+    //_timer!.cancel();
+    super.dispose();
+  }
+
   void checkInUser() async {
     if (userService.user != null) {
       await _accessBackendService.checkInUser(
           userService.user!, this.roomId!, this.checkOutTime!);
     }
+  }
+
+  void navigateToUserInfoView(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => UserInfoView()))
+        .then((_) {
+      notifyListeners();
+    });
   }
 
   void selectCheckOutTime(BuildContext context) {

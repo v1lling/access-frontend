@@ -33,6 +33,11 @@ Future main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: Colors.white, // this one for android
+      statusBarBrightness: Brightness.light // this one for iOS
+      ));
+
   bool? darkMode = prefs.getBool('darkMode') ?? false;
   List<String?> language = <String?>[prefs.getString('locale')];
 
