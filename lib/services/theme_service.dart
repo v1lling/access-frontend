@@ -39,8 +39,10 @@ class ThemeService extends ChangeNotifier {
   static final ThemeData darkTheme = ThemeData.dark();
 
   static final ThemeData lightTheme = ThemeData.light().copyWith(
-    primaryColor: Color(0xff247ba0),
-    highlightColor: Colors.green, //Color(0xff02c39a),
+    primaryColor: Colors.white,
+    canvasColor: Color(0xff334152), //Color(0xff009b91),
+    highlightColor: Color(0xff009b91),
+    scaffoldBackgroundColor: Color(0xffd9e5ec),
     textTheme: TextTheme(
         button: const TextStyle(
             fontSize: 16, fontFamily: 'Montserrat', color: Colors.white),

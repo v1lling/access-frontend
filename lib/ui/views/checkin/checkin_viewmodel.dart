@@ -7,12 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stacked/stacked.dart';
+import 'package:vibration/vibration.dart';
 
 class CheckInViewModel extends BaseViewModel {
   final AccessBackendService _accessBackendService =
       locator<AccessBackendService>();
   final UserService userService = locator<UserService>();
   String? roomId;
+  bool? isCheckedIn = false;
+  bool? isLoading = false;
 
   DateTime? checkOutTime = DateTime.now().add(Duration(minutes: 90));
 
@@ -26,10 +29,19 @@ class CheckInViewModel extends BaseViewModel {
     super.dispose();
   }
 
-  void checkInUser() async {
+  void checkInUser(AnimationController _animationController) async {
     if (userService.user != null) {
-      await _accessBackendService.checkInUser(
+      this.isLoading = true;
+      notifyListeners();
+
+      this.isCheckedIn = await _accessBackendService.checkInUser(
           userService.user!, this.roomId!, this.checkOutTime!);
+      this.isLoading = false;
+      if (this.isCheckedIn!) {
+        Vibration.vibrate();
+        _animationController.forward();
+      }
+      notifyListeners();
     }
   }
 

@@ -1,7 +1,7 @@
 {
     "landing": "Tap to Scan",
 
-    "userinfo_headline": "Please fill in your contact details",
+    "userinfo_headline": "Enter your contact details",
 
     "userinfo": "Contact details:",
     "givenname": "Given name",
@@ -16,7 +16,7 @@
     "cancel": "Cancel",
 
     "checkin": "Check-In",
-    "checkout_time": "Present until:"
-
+    "checkout_time": "Present until:",
+    "checkedin": "Checked In"
 
 }

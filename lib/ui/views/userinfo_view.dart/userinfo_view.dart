@@ -63,7 +63,7 @@ class UserInfoView extends StatelessWidget {
                                               .textTheme
                                               .bodyText2,
                                           focusColor:
-                                              Theme.of(context).primaryColor,
+                                              Theme.of(context).canvasColor,
                                           labelText:
                                               AppLocalizations.of(context)!
                                                   .givenname,
@@ -76,7 +76,7 @@ class UserInfoView extends StatelessWidget {
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Theme.of(context)
-                                                    .primaryColor),
+                                                    .canvasColor),
                                           ),
                                         ),
                                         validator: (value) {
@@ -99,7 +99,7 @@ class UserInfoView extends StatelessWidget {
                                             .bodyText1,
                                         decoration: InputDecoration(
                                           focusColor:
-                                              Theme.of(context).primaryColor,
+                                              Theme.of(context).canvasColor,
                                           labelText:
                                               AppLocalizations.of(context)!
                                                   .familyname,
@@ -112,7 +112,7 @@ class UserInfoView extends StatelessWidget {
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Theme.of(context)
-                                                    .primaryColor),
+                                                    .canvasColor),
                                           ),
                                         ),
                                         validator: (value) {
@@ -135,7 +135,7 @@ class UserInfoView extends StatelessWidget {
                                             .bodyText1,
                                         decoration: InputDecoration(
                                           focusColor:
-                                              Theme.of(context).primaryColor,
+                                              Theme.of(context).canvasColor,
                                           labelText:
                                               AppLocalizations.of(context)!
                                                   .street,
@@ -148,7 +148,7 @@ class UserInfoView extends StatelessWidget {
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Theme.of(context)
-                                                    .primaryColor),
+                                                    .canvasColor),
                                           ),
                                         ),
                                         validator: (value) {
@@ -171,7 +171,7 @@ class UserInfoView extends StatelessWidget {
                                             .bodyText1,
                                         decoration: InputDecoration(
                                           focusColor:
-                                              Theme.of(context).primaryColor,
+                                              Theme.of(context).canvasColor,
                                           labelText:
                                               AppLocalizations.of(context)!
                                                   .postalcode,
@@ -184,7 +184,7 @@ class UserInfoView extends StatelessWidget {
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Theme.of(context)
-                                                    .primaryColor),
+                                                    .canvasColor),
                                           ),
                                         ),
                                         validator: (value) {
@@ -207,7 +207,7 @@ class UserInfoView extends StatelessWidget {
                                             .bodyText1,
                                         decoration: InputDecoration(
                                           focusColor:
-                                              Theme.of(context).primaryColor,
+                                              Theme.of(context).canvasColor,
                                           labelText:
                                               AppLocalizations.of(context)!
                                                   .town,
@@ -220,7 +220,7 @@ class UserInfoView extends StatelessWidget {
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Theme.of(context)
-                                                    .primaryColor),
+                                                    .canvasColor),
                                           ),
                                         ),
                                         validator: (value) {
@@ -244,7 +244,7 @@ class UserInfoView extends StatelessWidget {
                                             TextCapitalization.words,
                                         decoration: InputDecoration(
                                           focusColor:
-                                              Theme.of(context).primaryColor,
+                                              Theme.of(context).canvasColor,
                                           labelText:
                                               AppLocalizations.of(context)!
                                                   .mobilenumber,
@@ -257,7 +257,7 @@ class UserInfoView extends StatelessWidget {
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Theme.of(context)
-                                                    .primaryColor),
+                                                    .canvasColor),
                                           ),
                                         ),
                                         validator: (value) {
@@ -303,7 +303,7 @@ class UserInfoView extends StatelessWidget {
                                                       MaterialStateProperty.all<
                                                               Color>(
                                                           Theme.of(context)
-                                                              .primaryColor),
+                                                              .canvasColor),
                                                 ),
                                                 child: Text(AppLocalizations.of(
                                                         context)!

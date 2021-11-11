@@ -16,6 +16,7 @@
     "cancel": "Abbrechen",
 
     "checkin": "Check-In",
-    "checkout_time": "Anwesend bis:"
+    "checkout_time": "Anwesend bis:",
+    "checkedin": "Checked In"
 
 }

@@ -23,13 +23,13 @@ class LandingView extends StatelessWidget {
               ),
               body: SafeArea(
                 child: Container(
-                  color: Theme.of(context).primaryColor,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Container(
-                          color: Theme.of(context).primaryColor, //,
+                          color: Theme.of(context).canvasColor, //,
+                          //color: Theme.of(context).canvasColor,
                           height: size.height * 0.2,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -37,7 +37,8 @@ class LandingView extends StatelessWidget {
                               Text(
                                   model.userService.user!.isUserInfoComplete()
                                       ? "Hi " +
-                                          model.userService.user!.givenname!
+                                          model.userService.user!.givenname! +
+                                          "!"
                                       : AppLocalizations.of(context)!
                                           .userinfo_headline,
                                   style: Theme.of(context).textTheme.headline2),
@@ -55,14 +56,17 @@ class LandingView extends StatelessWidget {
                       Expanded(
                         child: Container(
                           width: size.width,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
+
+                          /*decoration: 
+                          BoxDecoration(
+                            color: Color(0xffd9e5ec),
                             /*
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(36),
                                   topLeft: Radius.circular(36))
                                   */
                           ),
+                          */
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -76,7 +80,12 @@ class LandingView extends StatelessWidget {
                               ),
                               Text(AppLocalizations.of(context)!.landing,
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodyText1),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .copyWith(
+                                          color:
+                                              Theme.of(context).canvasColor)),
                             ],
                           ),
                         ),
