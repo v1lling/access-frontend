@@ -7,7 +7,7 @@ class AccessBackendService {
   final String baseUrl = "access.netpy.de";
   Map<String, String> headers = {"Content-Type": "application/json"};
 
-  Future<bool> checkInUser(
+  Future<int> checkInUser(
       User user, String roomId, DateTime checkoutTime) async {
     CheckInObject checkin = CheckInObject(
         userinfo: user,
@@ -17,10 +17,11 @@ class AccessBackendService {
     final response = await http.post(Uri.https(baseUrl, 'access/checkin'),
         body: jsonEncode(checkin.toJson()), headers: headers);
     if (response.statusCode == 200) {
-      return true;
+      print(json.decode(response.body));
+      return json.decode(response.body)["usercount"];
     } else {
       print("Something went wrong");
-      return false;
+      return -1;
     }
   }
 

@@ -17,6 +17,7 @@
 
     "checkin": "Check-In",
     "checkout_time": "Present until:",
-    "checkedin": "Checked In"
+    "checkedin": "Checked In",
+    "personscheckedin": " persons checked-in"
 
 }

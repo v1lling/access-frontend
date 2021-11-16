@@ -15,6 +15,7 @@ class CheckInViewModel extends BaseViewModel {
   final UserService userService = locator<UserService>();
   String? roomId;
   bool? isCheckedIn = false;
+  int? userCount = 0;
   bool? isLoading = false;
 
   DateTime? checkOutTime = DateTime.now().add(Duration(minutes: 90));
@@ -34,10 +35,11 @@ class CheckInViewModel extends BaseViewModel {
       this.isLoading = true;
       notifyListeners();
 
-      this.isCheckedIn = await _accessBackendService.checkInUser(
+      this.userCount = await _accessBackendService.checkInUser(
           userService.user!, this.roomId!, this.checkOutTime!);
       this.isLoading = false;
-      if (this.isCheckedIn!) {
+      if (this.userCount != -1) {
+        this.isCheckedIn = true;
         Vibration.vibrate();
         _animationController.forward();
       }
@@ -62,5 +64,9 @@ class CheckInViewModel extends BaseViewModel {
       checkOutTime = date;
       notifyListeners();
     }, currentTime: DateTime.now().add(Duration(minutes: 90)));
+  }
+
+  bool isCheckoutTimeValid() {
+    return this.checkOutTime!.compareTo(DateTime.now()) > 0;
   }
 }

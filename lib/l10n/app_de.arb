@@ -17,6 +17,7 @@
 
     "checkin": "Check-In",
     "checkout_time": "Anwesend bis:",
-    "checkedin": "Checked In"
+    "checkedin": "Checked In",
+    "personscheckedin": " Personen eingecheckt"
 
 }

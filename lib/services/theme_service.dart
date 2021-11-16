@@ -39,10 +39,11 @@ class ThemeService extends ChangeNotifier {
   static final ThemeData darkTheme = ThemeData.dark();
 
   static final ThemeData lightTheme = ThemeData.light().copyWith(
-    primaryColor: Colors.white,
+    primaryColor: Color(0xffd9e5ec),
     canvasColor: Color(0xff334152), //Color(0xff009b91),
     highlightColor: Color(0xff009b91),
     scaffoldBackgroundColor: Color(0xffd9e5ec),
+    errorColor: Color(0xffA3320B),
     textTheme: TextTheme(
         button: const TextStyle(
             fontSize: 16, fontFamily: 'Montserrat', color: Colors.white),
@@ -58,7 +59,7 @@ class ThemeService extends ChangeNotifier {
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.normal),
         headline1: const TextStyle(
-            color: Colors.black,
+            color: Color(0xff334152),
             fontSize: 20.0,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w600),
@@ -68,10 +69,10 @@ class ThemeService extends ChangeNotifier {
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w600),
         headline3: const TextStyle(
-            color: Colors.black,
-            fontSize: 26.0,
+            color: Colors.white,
+            fontSize: 24.0,
             fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w600)),
+            fontWeight: FontWeight.w800)),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),

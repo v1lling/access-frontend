@@ -85,6 +85,7 @@ class AccessApp extends StatefulWidget {
 }
 
 class _AccessAppState extends State<AccessApp> {
+  /*
   NfcState? _nfcState;
   // NfcPlugin? nfcPlugin = NfcPlugin();
   StreamSubscription<NfcEvent>? _nfcMesageSubscription;
@@ -103,7 +104,7 @@ class _AccessAppState extends State<AccessApp> {
   }
 
   Future<void> initPlatformState() async {
-    /*
+    
     try {
       _nfcState = await nfcPlugin!.nfcState;
       print('NFC state is $_nfcState');
@@ -140,8 +141,9 @@ class _AccessAppState extends State<AccessApp> {
         }
       });
     }
-    */
   }
+
+ */
 
   @override
   Widget build(BuildContext context) {

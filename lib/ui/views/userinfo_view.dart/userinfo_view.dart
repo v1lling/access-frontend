@@ -33,6 +33,8 @@ class UserInfoView extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 32.0, vertical: 32),
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       //HEADLINE
                                       Padding(
@@ -52,6 +54,10 @@ class UserInfoView extends StatelessWidget {
 
                                       //FIRSTNAME
                                       TextFormField(
+                                        autofillHints: [
+                                          AutofillHints.givenName
+                                        ],
+                                        autofocus: false,
                                         controller: model.givennameController,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -91,6 +97,10 @@ class UserInfoView extends StatelessWidget {
                                           height: paddingBetweenTextFields),
                                       //LASTNAME
                                       TextFormField(
+                                        autofocus: false,
+                                        autofillHints: [
+                                          AutofillHints.familyName
+                                        ],
                                         controller: model.familynameController,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -127,6 +137,10 @@ class UserInfoView extends StatelessWidget {
                                           height: paddingBetweenTextFields),
                                       //STREET
                                       TextFormField(
+                                        autofocus: false,
+                                        autofillHints: [
+                                          AutofillHints.streetAddressLine1
+                                        ],
                                         controller: model.streetController,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -163,6 +177,10 @@ class UserInfoView extends StatelessWidget {
                                           height: paddingBetweenTextFields),
                                       //POSTAL CODE
                                       TextFormField(
+                                        autofocus: false,
+                                        autofillHints: [
+                                          AutofillHints.postalCode
+                                        ],
                                         controller: model.postalcodeController,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -199,6 +217,10 @@ class UserInfoView extends StatelessWidget {
                                           height: paddingBetweenTextFields),
                                       //TOWN
                                       TextFormField(
+                                        autofocus: false,
+                                        autofillHints: [
+                                          AutofillHints.streetAddressLevel2
+                                        ],
                                         controller: model.townController,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -235,6 +257,10 @@ class UserInfoView extends StatelessWidget {
                                           height: paddingBetweenTextFields),
                                       //MOBILE NUMBER
                                       TextFormField(
+                                        autofocus: false,
+                                        autofillHints: [
+                                          AutofillHints.telephoneNumber
+                                        ],
                                         controller:
                                             model.mobilenumberController,
                                         style: Theme.of(context)

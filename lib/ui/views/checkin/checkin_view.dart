@@ -48,29 +48,40 @@ class _CheckInViewState extends State<CheckInView>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              IconButton(
-                                  icon: Icon(Icons.arrow_back),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
                               Padding(
-                                padding: const EdgeInsets.only(right: 16.0),
-                                child: Text(
-                                    AppLocalizations.of(context)!.checkin +
-                                        ": " +
-                                        this.roomId!,
-                                    style:
-                                        Theme.of(context).textTheme.headline2),
+                                padding: const EdgeInsets.only(left: 4),
+                                child: IconButton(
+                                    icon: Icon(Icons.arrow_back),
+                                    color: Colors.white,
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    }),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 24.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(AppLocalizations.of(context)!.checkin,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3),
+                                    Text(this.roomId!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline2),
+                                  ],
+                                ),
                               ),
                             ],
                           )),
                       Expanded(
                         child: Container(
-                          alignment: Alignment.center,
+                          alignment: Alignment.topCenter,
                           width: size.width,
                           padding: const EdgeInsets.only(
-                              top: 16, bottom: 32, left: 24, right: 24),
+                              top: 32, bottom: 38, left: 24, right: 24),
                           /*decoration: BoxDecoration(
                             color: Colors.white,
                             
@@ -80,13 +91,13 @@ class _CheckInViewState extends State<CheckInView>
                           ),*/
                           child: !model.isCheckedIn! && !model.isLoading!
                               ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Expanded(
                                       child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                            MainAxisAlignment.start,
                                         children: [
                                           Row(
                                             mainAxisAlignment:
@@ -133,8 +144,9 @@ class _CheckInViewState extends State<CheckInView>
                                                                     ? Theme.of(
                                                                             context)
                                                                         .canvasColor
-                                                                    : Colors
-                                                                        .red)),
+                                                                    : Theme.of(
+                                                                            context)
+                                                                        .errorColor)),
                                                     SizedBox(width: 4),
                                                     Icon(Icons.edit,
                                                         color: model
@@ -144,7 +156,8 @@ class _CheckInViewState extends State<CheckInView>
                                                                 null
                                                             ? Theme.of(context)
                                                                 .canvasColor
-                                                            : Colors.red)
+                                                            : Theme.of(context)
+                                                                .errorColor)
                                                   ],
                                                 ),
                                               ),
@@ -186,13 +199,22 @@ class _CheckInViewState extends State<CheckInView>
                                                             .textTheme
                                                             .headline1!
                                                             .copyWith(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .canvasColor)),
+                                                                color: model
+                                                                        .isCheckoutTimeValid()
+                                                                    ? Theme.of(
+                                                                            context)
+                                                                        .canvasColor
+                                                                    : Theme.of(
+                                                                            context)
+                                                                        .errorColor)),
                                                     SizedBox(width: 4),
                                                     Icon(Icons.edit,
-                                                        color: Theme.of(context)
-                                                            .canvasColor)
+                                                        color: model
+                                                                .isCheckoutTimeValid()
+                                                            ? Theme.of(context)
+                                                                .canvasColor
+                                                            : Theme.of(context)
+                                                                .errorColor)
                                                   ],
                                                 ),
                                               ),
@@ -222,16 +244,18 @@ class _CheckInViewState extends State<CheckInView>
                                               ),
                                               style: ButtonStyle(
                                                   foregroundColor:
-                                                      MaterialStateProperty.all<
-                                                          Color>(Colors.white),
+                                                      MaterialStateProperty.all<Color>(
+                                                          Colors.white),
                                                   backgroundColor: model
-                                                          .userService.user!
-                                                          .isUserInfoComplete()
+                                                              .userService.user!
+                                                              .isUserInfoComplete() &&
+                                                          model
+                                                              .isCheckoutTimeValid()
                                                       ? MaterialStateProperty.all<Color>(
                                                           Theme.of(context)
                                                               .highlightColor)
-                                                      : MaterialStateProperty.all<
-                                                          Color>(Colors.grey)),
+                                                      : MaterialStateProperty.all<Color>(
+                                                          Colors.grey)),
                                               onPressed: model.userService.user!
                                                       .isUserInfoComplete()
                                                   ? () {
@@ -244,39 +268,51 @@ class _CheckInViewState extends State<CheckInView>
                                     )
                                   ],
                                 )
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: new BoxDecoration(
-                                        color: Colors.transparent,
-                                        shape: BoxShape.circle,
-                                        border: new Border.all(
+                              : model.isLoading!
+                                  ? Center(
+                                      child: CircularProgressIndicator(
                                           color:
-                                              Theme.of(context).highlightColor,
-                                          width: 10,
-                                        ),
-                                      ),
-                                      width: size.width / 2,
-                                      height: size.width / 2,
-                                      alignment: Alignment.center,
-                                      child: model.isLoading!
-                                          ? Container()
-                                          : AnimatedCheck(
-                                              progress: _animation,
+                                              Theme.of(context).highlightColor))
+                                  : Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: new BoxDecoration(
+                                            color: Colors.transparent,
+                                            shape: BoxShape.circle,
+                                            border: new Border.all(
                                               color: Theme.of(context)
                                                   .highlightColor,
-                                              size: size.width / 2,
+                                              width: 10,
                                             ),
+                                          ),
+                                          width: size.width / 2,
+                                          height: size.width / 2,
+                                          alignment: Alignment.center,
+                                          child: model.isLoading!
+                                              ? Container()
+                                              : AnimatedCheck(
+                                                  progress: _animation,
+                                                  color: Theme.of(context)
+                                                      .highlightColor,
+                                                  size: size.width / 2,
+                                                ),
+                                        ),
+                                        SizedBox(height: 30),
+                                        Text(
+                                          model.userCount.toString() +
+                                              AppLocalizations.of(context)!
+                                                  .personscheckedin,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline1!
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .canvasColor),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(height: 30),
-                                    Text(
-                                      AppLocalizations.of(context)!.checkedin,
-                                      style:
-                                          Theme.of(context).textTheme.headline1,
-                                    ),
-                                  ],
-                                ),
                         ),
                       ),
                     ],
