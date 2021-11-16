@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:stacked/stacked.dart';
-import 'package:vibration/vibration.dart';
 
 class CheckInViewModel extends BaseViewModel {
   final AccessBackendService _accessBackendService =
@@ -22,6 +21,7 @@ class CheckInViewModel extends BaseViewModel {
 
   CheckInViewModel(String? roomId) {
     this.roomId = roomId;
+    print("hallo");
   }
 
   @override
@@ -40,7 +40,6 @@ class CheckInViewModel extends BaseViewModel {
       this.isLoading = false;
       if (this.userCount != -1) {
         this.isCheckedIn = true;
-        Vibration.vibrate();
         _animationController.forward();
       }
       notifyListeners();
