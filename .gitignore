@@ -1,6 +1,10 @@
 build-frontend.sh
 .vscode
 
+# Local Node Webserver
+local_webserver/node_modules
+local_webserver/build
+
 # Miscellaneous
 *.class
 *.log

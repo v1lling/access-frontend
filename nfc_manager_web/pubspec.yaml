@@ -1,0 +1,26 @@
+name: nfc_manager_web
+description: Flutter plugin to read and write NFC tags for Web.
+version: 0.0.1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.20.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+      sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      web:
+        pluginClass: NfcManagerPlugin
+        fileName: nfc_manager.dart
+  assets:
+    - assets/test.js
