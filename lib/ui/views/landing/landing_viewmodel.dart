@@ -16,6 +16,7 @@ class LandingViewModel extends BaseViewModel {
   LandingViewModel() {
     NfcManager.instance.startSession(
       onDiscovered: (NfcTag tag) async {
+        print(tag);
         this.handleTag(tag);
       },
     );

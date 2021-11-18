@@ -6,7 +6,6 @@ import 'dart:html';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'dart:js' as js;
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 
@@ -77,6 +76,11 @@ class NfcManagerPlugin {
     print(obj);
     document.on['fromJavascriptToDart'].listen((event) {
       print("HEY! I'M LISTENING!");
+      MethodChannel('plugins.flutter.io/nfc_manager')
+          .invokeMethod("onDiscovered", {
+        "data": {"name": "sascha"},
+        "handle": "hi"
+      });
     });
   }
 }
