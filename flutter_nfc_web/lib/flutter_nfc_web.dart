@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-
+import 'dart:html' as html;
 import 'global.dart';
 
 class FlutterNfcWeb {
@@ -19,10 +19,27 @@ class FlutterNfcWeb {
     return version;
   }
 
+  Future<String?> getNFCPermissionStatus() async {
+    html.PermissionStatus? permission =
+        await html.window.navigator.permissions?.query({'name': 'nfc'});
+    return permission?.state;
+  }
+
+//TODO: should we use html library in this file? maybe we should move it to web_web to avoid it in native apps? Find out!!
   Future<void> startNFCScan(
-      {Function? onTagDiscovered, Function? onError}) async {
+      {Function? onTagDiscovered,
+      Function? onError,
+      Function? onPermissionChanged}) async {
     tagDiscoveredCallback = onTagDiscovered;
     errorCallback = onError;
+    if (onPermissionChanged != null) {
+      permissionChangedCallback = onPermissionChanged;
+      html.PermissionStatus? permission =
+          await html.window.navigator.permissions?.query({'name': 'nfc'});
+      permission?.onChange.listen((event) {
+        onPermissionChanged(event);
+      });
+    }
     await _channel.invokeMethod('startNFCScan');
   }
 

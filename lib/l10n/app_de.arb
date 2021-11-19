@@ -1,6 +1,7 @@
 {
     "landing": "Tap to Scan",
-
+    "enablenfc": "Aktiviere NFC",
+    
     "userinfo_headline": "Bitte geben Sie ihre Kontaktdaten an",
 
     "userinfo": "Kontaktdaten:",

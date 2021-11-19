@@ -74,34 +74,9 @@ class AccessApp extends StatefulWidget {
 }
 
 class _AccessAppState extends State<AccessApp> {
-  void handleTag(String? tag) {
-    if (tag == null) return;
-    String? currentPath;
-    navigatorKey.currentState?.popUntil((route) {
-      currentPath = route.settings.name;
-      return true;
-    });
-    if (currentPath == "/") {
-      navigatorKey.currentState?.pushNamed("/checkin?room=" + tag);
-    } else {
-      navigatorKey.currentState?.pushReplacementNamed("/checkin?room=" + tag);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var localeService = Provider.of<LocaleService>(context);
-
-    FlutterNfcWeb.instance.startNFCScan(
-        onTagDiscovered: (List<JsNdefRecord> records) {
-      for (JsNdefRecord record in records) {
-        if (record.mediaType == "text/plain" && record.recordType == "mime") {
-          this.handleTag(record.data);
-        }
-      }
-    }, onError: (error) {
-      print(error);
-    });
 
     return Consumer<ThemeService>(
       builder: (context, notifire, child) {

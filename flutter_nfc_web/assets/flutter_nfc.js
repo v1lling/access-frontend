@@ -1,7 +1,10 @@
 let abortController = new AbortController();
 
+
 async function startNDEFReaderJS() {
     const ndef = new NDEFReader();
+    const nfcPermissionStatus = await navigator.permissions.query({ name: "nfc" });
+    console.log(nfcPermissionStatus);
     ndef.scan({signal: abortController.signal}).then(() => {
         console.log("Scan started successfully.");
         ndef.onreadingerror = (event) => raiseErrorEvent(event);
@@ -26,7 +29,10 @@ async function startNDEFReaderJS() {
             return;
         };
         
-    }).catch(error => raiseErrorEvent(error.message));
+    }).catch(error => {
+        console.log(error);
+        raiseErrorEvent(error.message);
+    });
 }
 
 function stopNDEFReaderJS() {

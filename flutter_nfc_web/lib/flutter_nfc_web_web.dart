@@ -34,8 +34,6 @@ class FlutterNfcWebWeb {
 
   Future<dynamic> handleMethodCall(MethodCall call) async {
     switch (call.method) {
-      case 'getPlatformVersion':
-        return getPlatformVersion();
       case 'startNFCScan':
         return _startNFCScan();
       case 'stopNFCScan':
@@ -48,12 +46,6 @@ class FlutterNfcWebWeb {
               'flutter_nfc_web for web doesn\'t implement \'${call.method}\'',
         );
     }
-  }
-
-  /// Returns a [String] containing the version of the platform.
-  Future<String> getPlatformVersion() {
-    final version = html.window.navigator.userAgent;
-    return Future.value(version);
   }
 
   /// Starts the NFCReader on JS-side
