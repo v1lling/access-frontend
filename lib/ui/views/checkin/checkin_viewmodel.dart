@@ -21,7 +21,6 @@ class CheckInViewModel extends BaseViewModel {
 
   CheckInViewModel(String? roomId) {
     this.roomId = roomId;
-    print("hallo");
   }
 
   @override

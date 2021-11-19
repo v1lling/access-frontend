@@ -11,6 +11,8 @@ import 'package:access/ui/views/userinfo_view.dart/userinfo_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_nfc_web/flutter_nfc_web.dart';
+import 'package:flutter_nfc_web/js_ndef_record.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -72,9 +74,34 @@ class AccessApp extends StatefulWidget {
 }
 
 class _AccessAppState extends State<AccessApp> {
+  void handleTag(String? tag) {
+    if (tag == null) return;
+    String? currentPath;
+    navigatorKey.currentState?.popUntil((route) {
+      currentPath = route.settings.name;
+      return true;
+    });
+    if (currentPath == "/") {
+      navigatorKey.currentState?.pushNamed("/checkin?room=" + tag);
+    } else {
+      navigatorKey.currentState?.pushReplacementNamed("/checkin?room=" + tag);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var localeService = Provider.of<LocaleService>(context);
+
+    FlutterNfcWeb.instance.startNFCScan(
+        onTagDiscovered: (List<JsNdefRecord> records) {
+      for (JsNdefRecord record in records) {
+        if (record.mediaType == "text/plain" && record.recordType == "mime") {
+          this.handleTag(record.data);
+        }
+      }
+    }, onError: (error) {
+      print(error);
+    });
 
     return Consumer<ThemeService>(
       builder: (context, notifire, child) {
@@ -101,7 +128,6 @@ class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     Uri settingsUri = Uri.parse(settings.name!);
     print("Navigating to: " + settingsUri.path);
-    print(settingsUri);
     Widget? pageView;
     switch (settingsUri.path) {
       case "/checkin":

@@ -403,6 +403,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.3+1"
+  flutter_nfc_web:
+    dependency: "direct main"
+    description:
+      path: flutter_nfc_web
+      relative: true
+    source: path
+    version: "0.0.1"
   flutter_phoenix:
     dependency: "direct main"
     description:
@@ -609,20 +616,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  nfc_manager:
-    dependency: "direct main"
-    description:
-      name: nfc_manager
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.0"
-  nfc_manager_web:
-    dependency: "direct main"
-    description:
-      path: nfc_manager_web
-      relative: true
-    source: path
-    version: "0.0.1"
   numerus:
     dependency: transitive
     description:

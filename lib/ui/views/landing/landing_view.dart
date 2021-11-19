@@ -80,7 +80,6 @@ class LandingView extends StatelessWidget {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                model.nfc != "" ? Text(model.nfc) : Container(),
                                 Image.asset(
                                   'assets/images/hand.png',
                                   width: 300.0,
