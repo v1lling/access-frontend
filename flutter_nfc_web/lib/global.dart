@@ -1,8 +1,10 @@
-/// Callback for tag discovered
+/// Success Callback
 Function? tagDiscoveredCallback = () => {};
+Function? writeSuccessfullCallback = () => {};
 
-/// Callback for error raised by NDEFReader
-Function? errorCallback = () => {};
+/// Callbacks for error raised by NDEFReader
+Function? readErrorCallback = () => {};
+Function? writeErrorCallback = () => {};
 
 /// Callback for nfc permission changed event
 Function? permissionChangedCallback = () => {};

@@ -1,6 +1,7 @@
 {
     "landing": "Tap to Scan",
     "enablenfc": "Enable NFC",
+    "nfcdenied": "NFC permissions denied",
 
     "userinfo_headline": "Enter your contact details",
 

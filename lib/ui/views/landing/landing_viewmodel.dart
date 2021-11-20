@@ -12,23 +12,49 @@ import 'package:stacked/stacked.dart';
 
 class LandingViewModel extends BaseViewModel {
   UserService userService = locator<UserService>();
+  bool? isNfcAvailable = false;
+  String? nfcPermission = "denied";
 
-  LandingViewModel() {}
+  LandingViewModel() {
+    FlutterNfcWeb.instance.isNFCWebAvailable().then((bool? isAvailable) {
+      this.isNfcAvailable = isAvailable;
+      if (isAvailable!) {
+        FlutterNfcWeb.instance
+            .getNFCPermissionStatus()
+            .then((String? permission) {
+          this.nfcPermission = permission;
+          if (permission == "granted") activateNFCScan();
+          notifyListeners();
+        });
+      }
+    });
+  }
 
   activateNFCScan() {
-    FlutterNfcWeb.instance.startNFCScan(
+    FlutterNfcWeb.instance.startNFCRead(
         onTagDiscovered: (List<JsNdefRecord> records) {
       for (JsNdefRecord record in records) {
-        if (record.mediaType == "text/plain" && record.recordType == "mime") {
-          this.handleTag(record.data);
+        if (record.recordType == "url" && record.data != null) {
+          Uri targetUri = Uri.dataFromString(record.data!);
+          String? roomId = targetUri.queryParameters["room"];
+          this.handleTag(roomId);
         }
       }
-      print(records);
     }, onError: (error) {
       print(error);
     }, onPermissionChanged: (permission) {
-      print(permission);
+      this.nfcPermission = permission;
       notifyListeners();
+    });
+  }
+
+  writeNFC() {
+    FlutterNfcWeb.instance.startNFCWrite([
+      JsNdefRecord(data: "https://access.netpy.de?room=Test", recordType: "url")
+    ], onWriteSuccess: () {
+      print("its done");
+    }, onError: (errorMsg) {
+      print(errorMsg);
     });
   }
 

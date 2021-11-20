@@ -13,95 +13,83 @@ class LandingView extends StatelessWidget {
     return ViewModelBuilder<LandingViewModel>.reactive(
         builder: (BuildContext context, LandingViewModel model,
                 Widget? child) =>
-            FutureBuilder(
-                future: FlutterNfcWeb.instance.getNFCPermissionStatus(),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.done:
-                      if (snapshot.data == "granted") model.activateNFCScan();
-                      return Scaffold(
-                        floatingActionButton: FloatingActionButton(
-                          backgroundColor: Theme.of(context).highlightColor,
-                          child: Icon(Icons.nfc),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CheckInView(roomId: "F-102")));
-                          },
-                        ),
-                        body: SafeArea(
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                    color: Theme.of(context).canvasColor,
-                                    height: size.height * 0.2,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                            model.userService.user!
-                                                    .isUserInfoComplete()
-                                                ? "Hi " +
-                                                    model.userService.user!
-                                                        .givenname! +
-                                                    "!"
-                                                : AppLocalizations.of(context)!
-                                                    .userinfo_headline,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline2),
-                                        IconButton(
-                                            icon: Icon(Icons.edit,
-                                                size: 20, color: Colors.white),
-                                            onPressed: () {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          UserInfoView()));
-                                            })
-                                      ],
-                                    )),
-                                Expanded(
-                                  child: Container(
-                                    width: size.width,
-                                    child: snapshot.data == "prompt"
-                                        ? Align(
-                                            alignment: Alignment.center,
-                                            child: Container(
-                                                width: size.width * 0.5,
-                                                height: 50,
-                                                child: TextButton(
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Icon(Icons.nfc),
-                                                        SizedBox(width: 8),
-                                                        Text(
-                                                            AppLocalizations.of(
-                                                                    context)!
-                                                                .enablenfc),
-                                                      ],
-                                                    ),
-                                                    style: ButtonStyle(
-                                                        foregroundColor:
-                                                            MaterialStateProperty
-                                                                .all<Color>(
-                                                                    Colors
-                                                                        .white),
-                                                        backgroundColor:
-                                                            MaterialStateProperty.all<
-                                                                Color>(Theme.of(
-                                                                    context)
-                                                                .highlightColor)),
-                                                    onPressed:
-                                                        model.activateNFCScan)),
-                                          )
-                                        : Column(
+            Scaffold(
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: Theme.of(context).highlightColor,
+                child: Icon(Icons.nfc),
+                onPressed: () {
+                  model.writeNFC();
+                },
+              ),
+              body: SafeArea(
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                          color: Theme.of(context).canvasColor,
+                          height: size.height * 0.2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                  model.userService.user!.isUserInfoComplete()
+                                      ? "Hi " +
+                                          model.userService.user!.givenname! +
+                                          "!"
+                                      : AppLocalizations.of(context)!
+                                          .userinfo_headline,
+                                  style: Theme.of(context).textTheme.headline2),
+                              IconButton(
+                                  icon: Icon(Icons.edit,
+                                      size: 20, color: Colors.white),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserInfoView()));
+                                  })
+                            ],
+                          )),
+                      Expanded(
+                        child: Container(
+                            width: size.width,
+                            child: !model.isNfcAvailable!
+                                ? Container()
+                                : model.nfcPermission == "prompt"
+                                    ? Align(
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                            width: size.width * 0.5,
+                                            height: 50,
+                                            child: TextButton(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.nfc),
+                                                    SizedBox(width: 8),
+                                                    Text(AppLocalizations.of(
+                                                            context)!
+                                                        .enablenfc),
+                                                  ],
+                                                ),
+                                                style: ButtonStyle(
+                                                    foregroundColor:
+                                                        MaterialStateProperty
+                                                            .all<Color>(
+                                                                Colors.white),
+                                                    backgroundColor:
+                                                        MaterialStateProperty.all<
+                                                            Color>(Theme.of(
+                                                                context)
+                                                            .highlightColor)),
+                                                onPressed:
+                                                    model.activateNFCScan)),
+                                      )
+                                    : model.nfcPermission == "granted"
+                                        ? Column(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -126,18 +114,31 @@ class LandingView extends StatelessWidget {
                                                                   context)
                                                               .canvasColor)),
                                             ],
-                                          ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    default:
-                      return Container();
-                  }
-                }),
+                                          )
+                                        : Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  AppLocalizations.of(context)!
+                                                      .nfcdenied,
+                                                  textAlign: TextAlign.center,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline1!
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .errorColor)),
+                                            ],
+                                          )),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
         viewModelBuilder: () => LandingViewModel());
   }
 }

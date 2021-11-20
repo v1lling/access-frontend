@@ -1,6 +1,7 @@
 {
     "landing": "Tap to Scan",
     "enablenfc": "Aktiviere NFC",
+    "nfcdenied": "NFC auf diesem Gerät blockiert",
     
     "userinfo_headline": "Bitte geben Sie ihre Kontaktdaten an",
 

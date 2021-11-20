@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_nfc_web/js_ndef_record.dart';
 import 'dart:html' as html;
 import 'global.dart';
 
@@ -14,9 +16,13 @@ class FlutterNfcWeb {
 
   FlutterNfcWeb._();
 
-  static Future<String?> get platformVersion async {
-    final String? version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+  Future<bool?> isNFCWebAvailable() async {
+    try {
+      await html.window.navigator.permissions?.query({'name': 'nfc'});
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<String?> getNFCPermissionStatus() async {
@@ -26,24 +32,35 @@ class FlutterNfcWeb {
   }
 
 //TODO: should we use html library in this file? maybe we should move it to web_web to avoid it in native apps? Find out!!
-  Future<void> startNFCScan(
+  Future<void> startNFCRead(
       {Function? onTagDiscovered,
       Function? onError,
       Function? onPermissionChanged}) async {
     tagDiscoveredCallback = onTagDiscovered;
-    errorCallback = onError;
+    readErrorCallback = onError;
     if (onPermissionChanged != null) {
       permissionChangedCallback = onPermissionChanged;
       html.PermissionStatus? permission =
           await html.window.navigator.permissions?.query({'name': 'nfc'});
       permission?.onChange.listen((event) {
-        onPermissionChanged(event);
+        onPermissionChanged(permission.state);
       });
     }
-    await _channel.invokeMethod('startNFCScan');
+    await _channel.invokeMethod('startNFCRead');
   }
 
   Future<void> stopNFCScan() async {
     await _channel.invokeMethod('stopNFCScan');
+  }
+
+  Future<void> startNFCWrite(List<JsNdefRecord> records,
+      {Function? onWriteSuccess, Function? onError}) async {
+    writeSuccessfullCallback = onWriteSuccess;
+    writeErrorCallback = onError;
+    List<String> recordsString = [];
+    for (JsNdefRecord record in records) {
+      recordsString.add(jsonEncode(record));
+    }
+    await _channel.invokeMethod('startNFCWrite', {'records': recordsString});
   }
 }

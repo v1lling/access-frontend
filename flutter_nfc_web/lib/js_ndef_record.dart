@@ -34,6 +34,15 @@ class JsNdefRecord {
     return JsNdefRecord();
   }
 
+  Map<String, dynamic> toJson() => {
+        'data': data,
+        'encoding': encoding,
+        'id': id,
+        'lang': lang,
+        'mediaType': mediaType,
+        'recordType': recordType
+      };
+
   @override
   List<Object> get props =>
       [data!, encoding!, id!, lang!, mediaType!, recordType!];
