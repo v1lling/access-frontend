@@ -64,6 +64,8 @@ dependencies:
   flutter_nfc_web:
     path: ./flutter_nfc_web
   js: ^0.6.3
+  sliding_up_panel: ^2.0.0+1
+
 
 dev_dependencies:
   build_runner: ^2.0.4

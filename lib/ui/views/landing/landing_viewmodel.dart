@@ -8,12 +8,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nfc_web/flutter_nfc_web.dart';
 import 'package:flutter_nfc_web/flutter_nfc_web_web.dart';
 import 'package:flutter_nfc_web/js_ndef_record.dart';
+import 'package:access/ui/widgets/panel_scan.dart';
+import 'package:access/ui/widgets/panel_success.dart';
+import 'package:access/ui/widgets/panel_usercount.dart';
+import 'package:flutter/material.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked/stacked.dart';
 
 class LandingViewModel extends BaseViewModel {
   UserService userService = locator<UserService>();
   bool? isNfcAvailable = false;
   String? nfcPermission = "denied";
+
+  final PanelController panelController = PanelController();
+  Widget panelContent = Container();
 
   LandingViewModel() {
     FlutterNfcWeb.instance.isNFCWebAvailable().then((bool? isAvailable) {
@@ -23,7 +31,6 @@ class LandingViewModel extends BaseViewModel {
             .getNFCPermissionStatus()
             .then((String? permission) {
           this.nfcPermission = permission;
-          if (permission == "granted") activateNFCScan();
           notifyListeners();
         });
       }
