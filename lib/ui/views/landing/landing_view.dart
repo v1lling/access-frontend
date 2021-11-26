@@ -49,8 +49,8 @@ class LandingView extends StatelessWidget {
                           )),
                       Expanded(
                         child: !model.isNfcAvailable! ||
-                                model.nfcPermission != "prompt" ||
-                                model.nfcPermission != "granted"
+                                (model.nfcPermission != "prompt" &&
+                                    model.nfcPermission != "granted")
                             ? Container()
                             : SlidingUpPanel(
                                 controller: model.panelController,
@@ -122,7 +122,7 @@ class LandingView extends StatelessWidget {
                                           title: AppLocalizations.of(context)!
                                               .create_nfc_tag,
                                           icon: Icons.contactless_outlined,
-                                          onTap: model.startNFCWrite),
+                                          onTap: model.writeNFC),
                                     ],
                                   ),
                                 )),

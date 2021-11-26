@@ -38,6 +38,8 @@ class LandingViewModel extends BaseViewModel {
   }
 
   activateNFCScan() {
+    panelContent = PanelScan();
+    notifyListeners();
     FlutterNfcWeb.instance.startNFCRead(
         onTagDiscovered: (List<JsNdefRecord> records) {
       for (JsNdefRecord record in records) {
@@ -56,9 +58,13 @@ class LandingViewModel extends BaseViewModel {
   }
 
   writeNFC() {
+    panelContent = PanelScan();
+    notifyListeners();
     FlutterNfcWeb.instance.startNFCWrite([
       JsNdefRecord(data: "https://access.netpy.de?room=Test", recordType: "url")
     ], onWriteSuccess: () {
+      panelContent = PanelSuccess();
+      notifyListeners();
       print("its done");
     }, onError: (errorMsg) {
       print(errorMsg);
