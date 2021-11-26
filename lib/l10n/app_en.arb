@@ -1,7 +1,15 @@
 {
     "landing": "Tap to Scan",
+    "readytoscan": "Ready to Scan",
+    "holdnear": "Hold your phone near the NFC Tag",
+    "close": "Close",
+    "usercount": "persons checked-in",
+    "create_nfc_tag": "Create NFC-Tag",
+    "get_checkins": "Number of Attendees",
 
-    "userinfo_headline": "Enter your contact details",
+    "userinfo_title": "Contact details",
+    "userinfo_enter": "Enter your contact details",
+
 
     "userinfo": "Contact details:",
     "givenname": "Given name",
@@ -9,8 +17,7 @@
     "street": "Street and number",
     "postalcode": "Postal code",
     "town": "Town",
-    "mobilenumber": "Mobile phone number"
-    ,
+    "mobilenumber": "Mobile phone number",
     "save": "Save",
     "back": "Back",
     "cancel": "Cancel",

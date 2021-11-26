@@ -1,7 +1,9 @@
 import 'package:access/ui/views/checkin/checkin_view.dart';
 import 'package:access/ui/views/landing/landing_viewmodel.dart';
 import 'package:access/ui/views/userinfo_view.dart/userinfo_view.dart';
+import 'package:access/ui/widgets/landing_action.dart';
 import 'package:flutter/material.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -13,94 +15,119 @@ class LandingView extends StatelessWidget {
         builder: (BuildContext context, LandingViewModel model,
                 Widget? child) =>
             Scaffold(
-              floatingActionButton: FloatingActionButton(
-                backgroundColor: Theme.of(context).highlightColor,
-                child: Icon(Icons.nfc),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CheckInView(roomId: "F-102")));
-                },
-              ),
               body: SafeArea(
-                child: GestureDetector(
-                  onTap: () {
-                    // Workaround for Keyboard Bug on iOS Safari
-                    FocusScopeNode currentFocus = FocusScope.of(context);
-                    if (!currentFocus.hasPrimaryFocus &&
-                        currentFocus.focusedChild != null) {
-                      currentFocus.focusedChild!.unfocus();
-                    }
-                  },
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                            color: Theme.of(context).canvasColor,
-                            height: size.height * 0.2,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                    model.userService.user!.isUserInfoComplete()
-                                        ? "Hi " +
-                                            model.userService.user!.givenname! +
-                                            "!"
-                                        : AppLocalizations.of(context)!
-                                            .userinfo_headline,
-                                    style:
-                                        Theme.of(context).textTheme.headline2),
-                                IconButton(
-                                    icon: Icon(Icons.edit,
-                                        size: 20, color: Colors.white),
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  UserInfoView()));
-                                    })
-                              ],
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                          color: Theme.of(context).canvasColor,
+                          height: size.height * 0.2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                  model.userService.user!.isUserInfoComplete()
+                                      ? "Hi, " +
+                                          model.userService.user!.givenname! +
+                                          "!"
+                                      : AppLocalizations.of(context)!
+                                          .userinfo_enter,
+                                  style: Theme.of(context).textTheme.headline2),
+                              IconButton(
+                                  icon: Icon(Icons.edit,
+                                      size: 20, color: Colors.white),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserInfoView()));
+                                  })
+                            ],
+                          )),
+                      Expanded(
+                        child: SlidingUpPanel(
+                            controller: model.panelController,
+                            backdropEnabled: true,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(24.0),
+                              topRight: Radius.circular(24.0),
+                            ),
+                            panel: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    model.panelContent,
+                                    SizedBox(height: 20),
+                                    Container(
+                                      width: size.width,
+                                      height: 50,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          model.panelController.close();
+                                        },
+                                        child: Text(
+                                            AppLocalizations.of(context)!
+                                                .close),
+                                        style: ButtonStyle(
+                                            foregroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.white),
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.grey)),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                            minHeight: 0,
+                            maxHeight: size.height / 2,
+                            body: Container(
+                              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                              width: size.width,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  LandingActionButton(
+                                      title: "Check-In",
+                                      icon: Icons.check,
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CheckInView(
+                                                        roomId: "F-102")));
+                                      }),
+                                  SizedBox(height: 8),
+                                  Divider(
+                                    thickness: 1,
+                                  ),
+                                  SizedBox(height: 8),
+                                  LandingActionButton(
+                                      title: AppLocalizations.of(context)!
+                                          .get_checkins,
+                                      icon: Icons.people_sharp,
+                                      onTap: model.startNFCWrite),
+                                  SizedBox(height: 8),
+                                  Divider(
+                                    thickness: 1,
+                                  ),
+                                  SizedBox(height: 8),
+                                  LandingActionButton(
+                                      title: AppLocalizations.of(context)!
+                                          .create_nfc_tag,
+                                      icon: Icons.contactless_outlined,
+                                      onTap: model.startNFCWrite),
+                                ],
+                              ),
                             )),
-                        Expanded(
-                          child: Container(
-                            width: size.width,
-
-                            /*decoration: 
-                            BoxDecoration(
-                              color: Color(0xffd9e5ec),
-                              /*
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(36),
-                                    topLeft: Radius.circular(36))
-                                    */
-                            ),
-                            */
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/hand.png',
-                                  width: 300.0,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                ),
-                                Text(AppLocalizations.of(context)!.landing,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline1!
-                                        .copyWith(
-                                            color:
-                                                Theme.of(context).canvasColor)),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -108,3 +135,5 @@ class LandingView extends StatelessWidget {
         viewModelBuilder: () => LandingViewModel());
   }
 }
+
+class LandingAction {}

@@ -301,16 +301,12 @@ class _CheckInViewState extends State<CheckInView>
                                         ),
                                         SizedBox(height: 30),
                                         Text(
-                                          model.userCount.toString() +
-                                              AppLocalizations.of(context)!
-                                                  .personscheckedin,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline1!
-                                              .copyWith(
-                                                  color: Theme.of(context)
-                                                      .canvasColor),
-                                        ),
+                                            model.userCount.toString() +
+                                                AppLocalizations.of(context)!
+                                                    .personscheckedin,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2),
                                       ],
                                     ),
                         ),

@@ -44,35 +44,42 @@ class ThemeService extends ChangeNotifier {
     highlightColor: Color(0xff009b91),
     scaffoldBackgroundColor: Color(0xffd9e5ec),
     errorColor: Color(0xffA3320B),
+    dividerColor: Colors.black,
     textTheme: TextTheme(
-        button: const TextStyle(
-            fontSize: 16, fontFamily: 'Montserrat', color: Colors.white),
-        bodyText1: const TextStyle(
-            color: Colors.black,
-            fontSize: 16.0,
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.normal),
-        bodyText2: const TextStyle(
-            color: Color(0xff334152),
-            fontSize: 18.0,
-            fontFamily: 'Montserrat',
-            //fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.normal),
-        headline1: const TextStyle(
-            color: Color(0xff334152),
-            fontSize: 20.0,
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w600),
-        headline2: const TextStyle(
-            color: Colors.white,
-            fontSize: 20.0,
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w600),
-        headline3: const TextStyle(
-            color: Colors.white,
-            fontSize: 24.0,
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w800)),
+      button: const TextStyle(
+          fontSize: 16, fontFamily: 'Montserrat', color: Colors.white),
+      bodyText1: const TextStyle(
+          color: Colors.black,
+          fontSize: 16.0,
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.normal),
+      bodyText2: const TextStyle(
+          color: Color(0xff334152),
+          fontSize: 18.0,
+          fontFamily: 'Montserrat',
+          //fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w600),
+      headline2: const TextStyle(
+          color: Colors.white,
+          fontSize: 20.0,
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.w600),
+      headline3: const TextStyle(
+          color: Colors.white,
+          fontSize: 24.0,
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.w800),
+      headline4: const TextStyle(
+          color: Color(0xff334152),
+          fontSize: 24.0,
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.w400),
+      headline5: const TextStyle(
+          color: Color(0xff334152),
+          fontSize: 72.0,
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.w400),
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),

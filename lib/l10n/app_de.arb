@@ -1,7 +1,14 @@
 {
     "landing": "Tap to Scan",
+    "readytoscan": "Bereit zum Scannen",
+    "holdnear": "Halte dein Gerät an den NFC Tag",
+    "close": "Schließen",
+    "usercount": "Personen eingecheckt",
+    "create_nfc_tag": "Erstelle NFC-Tag",
+    "get_checkins": "Anzahl der Anwesenden",
 
-    "userinfo_headline": "Bitte geben Sie ihre Kontaktdaten an",
+    "userinfo_title": "Kontaktdaten",
+    "userinfo_enter": "Bitte geben Sie ihre Kontaktdaten an",
 
     "userinfo": "Kontaktdaten:",
     "givenname": "Vorname",
