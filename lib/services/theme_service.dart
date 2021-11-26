@@ -53,10 +53,10 @@ class ThemeService extends ChangeNotifier {
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.normal),
         bodyText2: const TextStyle(
-            color: Colors.grey,
-            fontSize: 14.0,
+            color: Color(0xff334152),
+            fontSize: 18.0,
             fontFamily: 'Montserrat',
-            fontStyle: FontStyle.italic,
+            //fontStyle: FontStyle.italic,
             fontWeight: FontWeight.normal),
         headline1: const TextStyle(
             color: Color(0xff334152),

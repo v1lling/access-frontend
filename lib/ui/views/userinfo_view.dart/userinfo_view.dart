@@ -65,9 +65,6 @@ class UserInfoView extends StatelessWidget {
                                             .textTheme
                                             .bodyText1,
                                         decoration: InputDecoration(
-                                          hintStyle: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2,
                                           focusColor:
                                               Theme.of(context).canvasColor,
                                           labelText:

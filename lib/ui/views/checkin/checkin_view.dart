@@ -108,7 +108,7 @@ class _CheckInViewState extends State<CheckInView>
                                                       .userinfo,
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .headline1),
+                                                      .bodyText2),
                                               TextButton(
                                                 style: TextButton.styleFrom(
                                                   minimumSize: Size.zero,
@@ -134,7 +134,7 @@ class _CheckInViewState extends State<CheckInView>
                                                         style: Theme
                                                                 .of(context)
                                                             .textTheme
-                                                            .headline1!
+                                                            .bodyText2!
                                                             .copyWith(
                                                                 color: model
                                                                             .userService
@@ -174,7 +174,7 @@ class _CheckInViewState extends State<CheckInView>
                                                       .checkout_time,
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .headline1),
+                                                      .bodyText2),
                                               TextButton(
                                                 style: TextButton.styleFrom(
                                                   minimumSize: Size.zero,
@@ -197,7 +197,7 @@ class _CheckInViewState extends State<CheckInView>
                                                                 .checkOutTime!),
                                                         style: Theme.of(context)
                                                             .textTheme
-                                                            .headline1!
+                                                            .bodyText2!
                                                             .copyWith(
                                                                 color: model
                                                                         .isCheckoutTimeValid()
