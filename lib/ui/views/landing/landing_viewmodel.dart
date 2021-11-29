@@ -6,7 +6,6 @@ import 'package:access/services/user_service.dart';
 import 'package:access/ui/views/checkin/checkin_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nfc_web/flutter_nfc_web.dart';
-import 'package:flutter_nfc_web/flutter_nfc_web_web.dart';
 import 'package:flutter_nfc_web/js_ndef_record.dart';
 import 'package:access/ui/widgets/panel_scan.dart';
 import 'package:access/ui/widgets/panel_success.dart';

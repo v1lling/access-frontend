@@ -11,8 +11,6 @@ import 'package:access/ui/views/userinfo_view.dart/userinfo_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_nfc_web/flutter_nfc_web.dart';
-import 'package:flutter_nfc_web/js_ndef_record.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked_services/stacked_services.dart';
