@@ -8,7 +8,6 @@ async function startNDEFReaderJS() {
         ndef.onreading = event => {
             let records = [];
             const decoder = new TextDecoder();
-            console.log(event.message.records);
             event.message.records.forEach(function(record) {
                 let recordObj = new JsNdefRecord({
                     data: decoder.decode(record.data),

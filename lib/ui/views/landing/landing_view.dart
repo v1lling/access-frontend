@@ -3,7 +3,6 @@ import 'package:access/ui/views/landing/landing_viewmodel.dart';
 import 'package:access/ui/views/userinfo_view.dart/userinfo_view.dart';
 import 'package:access/ui/widgets/landing_action.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_nfc_web/flutter_nfc_web.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
