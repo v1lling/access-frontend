@@ -1,8 +1,9 @@
-import 'package:access/ui/views/checkin/checkin_view.dart';
 import 'package:access/ui/views/landing/landing_viewmodel.dart';
 import 'package:access/ui/views/userinfo_view.dart/userinfo_view.dart';
 import 'package:access/ui/widgets/landing_action.dart';
+import 'package:access/ui/widgets/prompt_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:nfc_manager/nfc_manager.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -47,11 +48,12 @@ class LandingView extends StatelessWidget {
                             ],
                           )),
                       Expanded(
-                        child: !model.isNfcAvailable! ||
-                                (model.nfcPermission != "prompt" &&
-                                    model.nfcPermission != "granted")
+                        child: !model.isNfcAvailable!
                             ? Container()
                             : SlidingUpPanel(
+                                onPanelClosed: () {
+                                  NfcManager.instance.stopSession();
+                                },
                                 controller: model.panelController,
                                 backdropEnabled: true,
                                 borderRadius: BorderRadius.only(
@@ -101,7 +103,7 @@ class LandingView extends StatelessWidget {
                                       LandingActionButton(
                                           title: "Check-In",
                                           icon: Icons.check,
-                                          onTap: model.activateNFCScan),
+                                          onTap: model.activateNFCCheckin),
                                       SizedBox(height: 8),
                                       Divider(
                                         thickness: 1,
@@ -111,7 +113,7 @@ class LandingView extends StatelessWidget {
                                           title: AppLocalizations.of(context)!
                                               .get_checkins,
                                           icon: Icons.people_sharp,
-                                          onTap: model.writeNFC),
+                                          onTap: model.activateNFCCount),
                                       SizedBox(height: 8),
                                       Divider(
                                         thickness: 1,
@@ -121,7 +123,25 @@ class LandingView extends StatelessWidget {
                                           title: AppLocalizations.of(context)!
                                               .create_nfc_tag,
                                           icon: Icons.contactless_outlined,
-                                          onTap: model.writeNFC),
+                                          onTap: () async {
+                                            String? roomId = await prompt(
+                                              context,
+                                              initialValue: "TestRoom",
+                                              title: Text("Room ID",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1),
+                                              textOK: Text('OK',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1),
+                                              textCancel: Text('Cancel',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1),
+                                            );
+                                            model.writeNFC(roomId);
+                                          }),
                                     ],
                                   ),
                                 )),

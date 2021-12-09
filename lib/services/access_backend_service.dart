@@ -17,7 +17,18 @@ class AccessBackendService {
     final response = await http.post(Uri.https(baseUrl, 'access/checkin'),
         body: jsonEncode(checkin.toJson()), headers: headers);
     if (response.statusCode == 200) {
-      print(json.decode(response.body));
+      return json.decode(response.body)["usercount"];
+    } else {
+      print("Something went wrong");
+      return -1;
+    }
+  }
+
+  Future<int> checkInCount(String roomId) async {
+    final response = await http.get(
+        Uri.https(baseUrl, 'access/checkincount', {"roomId": roomId}),
+        headers: headers);
+    if (response.statusCode == 200) {
       return json.decode(response.body)["usercount"];
     } else {
       print("Something went wrong");

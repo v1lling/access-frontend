@@ -1,4 +1,5 @@
 import 'package:access/ui/views/checkin/checkin_viewmodel.dart';
+import 'package:access/ui/views/landing/landing_view.dart';
 import 'package:animated_check/animated_check.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -54,7 +55,8 @@ class _CheckInViewState extends State<CheckInView>
                                     icon: Icon(Icons.arrow_back),
                                     color: Colors.white,
                                     onPressed: () {
-                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => LandingView()));
                                     }),
                               ),
                               Padding(

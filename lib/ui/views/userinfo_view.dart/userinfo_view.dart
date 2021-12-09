@@ -1,4 +1,5 @@
 import 'package:access/services/locale_service.dart';
+import 'package:access/ui/views/landing/landing_view.dart';
 import 'package:access/ui/views/userinfo_view.dart/userinfo_viewmodel.dart';
 import 'package:access/validators/userinfo_validators.dart';
 import 'package:flutter/material.dart';
@@ -55,9 +56,6 @@ class UserInfoView extends StatelessWidget {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            SizedBox(
-                                                height:
-                                                    paddingBetweenTextFields),
                                             SizedBox(
                                                 height:
                                                     paddingBetweenTextFields),
@@ -353,7 +351,11 @@ class UserInfoView extends StatelessWidget {
                                                               .cancel),
                                                       onPressed: () {
                                                         Navigator.of(context)
-                                                            .pop();
+                                                            .pushReplacement(
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            LandingView()));
                                                       }),
                                                 ),
                                                 Padding(

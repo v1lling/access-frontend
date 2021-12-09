@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LandingActionButton extends StatelessWidget {
   final Function onTap;

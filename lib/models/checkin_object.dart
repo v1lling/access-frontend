@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:access/models/user.dart';
 import 'package:equatable/equatable.dart';
-import 'package:http/http.dart';
 
 class CheckInObject extends Equatable {
   CheckInObject({this.userinfo, this.roomId, this.checkin, this.checkout});

@@ -5,6 +5,9 @@ build-frontend.sh
 local_webserver/node_modules
 local_webserver/build
 
+uni_links/
+flutter_nfc_web/
+
 # Miscellaneous
 *.class
 *.log

@@ -69,8 +69,15 @@ app.use((req, res, next) => {
     Middleware for serving Vue App
 */
 const staticFileMiddleware = express.static(path.join(__dirname + '/../build/web'));
-console.log(path.join(__dirname + '/../build/web'));
 app.use(staticFileMiddleware);
+
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '/../build/web/index.html'), function (err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})
 
 const options = {
   key: fs.readFileSync('localhost-key.pem'),

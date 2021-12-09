@@ -1,118 +1,123 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:access/app/locator.dart';
-import 'package:access/main.dart';
+import 'package:access/services/access_backend_service.dart';
+import 'package:access/services/uri_routing_service.dart';
 import 'package:access/services/user_service.dart';
-import 'package:access/ui/views/checkin/checkin_view.dart';
+import 'package:access/ui/widgets/panel_usercount.dart';
 import 'package:flutter/material.dart';
 import 'package:access/ui/widgets/panel_scan.dart';
 import 'package:access/ui/widgets/panel_success.dart';
-import 'package:access/ui/widgets/panel_usercount.dart';
-import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked/stacked.dart';
 
 class LandingViewModel extends BaseViewModel {
   UserService userService = locator<UserService>();
+  UriRoutingService uriRoutingService = locator<UriRoutingService>();
+  final AccessBackendService _accessBackendService =
+      locator<AccessBackendService>();
+
   bool? isNfcAvailable = false;
-  String? nfcPermission = "denied";
 
   final PanelController panelController = PanelController();
   Widget panelContent = Container();
 
   LandingViewModel() {
-    this.isNfcAvailable = true;
-    this.nfcPermission = "granted";
+    checkNFCPermissions();
+  }
+
+  void checkNFCPermissions() {
+    NfcManager.instance.isAvailable().then((isAvailable) {
+      this.isNfcAvailable = isAvailable;
+      notifyListeners();
+    });
+  }
+
+  void activateNFCCheckin() {
+    panelContent = PanelScan();
     notifyListeners();
+    panelController.open();
+
+    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+      panelController.close();
+      String? roomId = await _getUriStringFromTag(tag);
+      if (roomId != null) uriRoutingService.navigateFromUri(roomId);
+    }, onError: (NfcError error) async {
+      print(error);
+      panelController.close();
+      checkNFCPermissions(); // in case permissions are the problem (prompt denied)
+    });
+  }
+
+  void activateNFCCount() async {
+    panelContent = PanelScan();
+    notifyListeners();
+    panelController.open();
+
     NfcManager.instance.startSession(
       onDiscovered: (NfcTag tag) async {
-        this.handleTag(tag);
+        notifyListeners();
+        String? uriString = await _getUriStringFromTag(tag);
+        if (uriString != null) {
+          String? roomId = _getRoomIdFromUriString(uriString);
+          if (roomId != null) {
+            var userCount = await _accessBackendService.checkInCount(roomId);
+            panelContent = PanelUserCount(roomId: roomId, userCount: userCount);
+            notifyListeners();
+          }
+        }
       },
     );
-    /*
-    FlutterNfcWeb.instance.isNFCWebAvailable().then((bool? isAvailable) {
-      this.isNfcAvailable = isAvailable;
-      if (isAvailable!) {
-        FlutterNfcWeb.instance
-            .getNFCPermissionStatus()
-            .then((String? permission) {
-          this.nfcPermission = permission;
-          notifyListeners();
-        });
-      }
-    });
-    */
   }
 
-  activateNFCScan() {
+  void writeNFC(String? roomId) {
+    if (roomId == null) return;
     panelContent = PanelScan();
     notifyListeners();
-    /*
-    FlutterNfcWeb.instance.startNFCRead(
-        onTagDiscovered: (List<JsNdefRecord> records) {
-      for (JsNdefRecord record in records) {
-        if (record.recordType == "url" && record.data != null) {
-          Uri targetUri = Uri.dataFromString(record.data!);
-          String? roomId = targetUri.queryParameters["room"];
-          this.handleTag(roomId);
-        }
+    panelController.open();
+    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+      Ndef? tech = await Ndef.from(tag);
+      if (tech is Ndef) {
+        final url = Uri.parse("https://access.netpy.de/checkin?room=" + roomId);
+        //final record = NdefRecord.createUri(url);
+        //final record = NdefRecord.createMime("text/json", Uint8List.fromList("lol".codeUnits));
+        //final record =
+        //  NdefRecord.createText("Was geht mein Kamerad", languageCode: "de");
+        final record = NdefRecord.createExternal("sascha", "schnipi",
+            Uint8List.fromList("hey schnippschnapp".codeUnits));
+
+        final message = NdefMessage([record]);
+
+        await tech.write(message);
+        panelContent = PanelSuccess();
+        notifyListeners();
       }
-    }, onError: (error) {
-      print(error);
-    }, onPermissionChanged: (permission) {
-      this.nfcPermission = permission;
-      notifyListeners();
     });
-    */
   }
 
-  writeNFC() {
-    panelContent = PanelScan();
-    notifyListeners();
-    /*
-    FlutterNfcWeb.instance.startNFCWrite([
-      JsNdefRecord(
-          data: "https://access.netpy.de/#/checkin?room=Test",
-          recordType: "url")
-    ], onWriteSuccess: () {
-      panelContent = PanelSuccess();
-      notifyListeners();
-      print("its done");
-    }, onError: (errorMsg) {
-      print(errorMsg);
-    });
-    */
-  }
-
-  void handleTag(NfcTag tag) async {
+  Future<String?> _getUriStringFromTag(NfcTag tag) async {
     Ndef? tech = await Ndef.from(tag);
     if (tech is Ndef) {
-      // get current path
-      String? currentPath;
-      navigatorKey.currentState?.popUntil((route) {
-        currentPath = route.settings.name;
-        return true;
-      });
-
       // find ndef record for navigation
-      for (NdefRecord record in tech.cachedMessage!.records) {
-        if ((utf8.decode(record.type) == "U" && record.payload != null) ||
-            ( // Android
-                utf8.decode(record.type) == "url" &&
-                    record.payload != null)) // Web
-        {
-          Uri targetUri = Uri.dataFromString(utf8.decode(record.payload));
-          String? roomId = targetUri.queryParameters["room"];
-          if (roomId == null) return;
-          if (currentPath == "/") {
-            navigatorKey.currentState?.pushNamed("/checkin?room=" + roomId);
-          } else {
-            navigatorKey.currentState
-                ?.pushReplacementNamed("/checkin?room=" + roomId);
+      if (tech.cachedMessage != null) {
+        for (NdefRecord record in tech.cachedMessage!.records) {
+          print(utf8.decode(record.type));
+          print(utf8.decode(record.payload));
+          if (utf8.decode(record.type) == "U") {
+            String targetUri = utf8.decode(record.payload);
+            return targetUri;
           }
         }
       }
     }
+    return null;
+  }
+
+  String? _getRoomIdFromUriString(String? uriString) {
+    if (uriString == null) return null;
+    Uri targetUri = Uri.dataFromString(uriString);
+    return targetUri.queryParameters["room"];
   }
 }
