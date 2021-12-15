@@ -13,7 +13,9 @@ class UserInfoViewModel extends BaseViewModel {
   final postalcodeController = TextEditingController();
   final townController = TextEditingController();
   final mobilenumberController = TextEditingController();
-
+  UserInfoViewModel() {
+    fillUserInfo();
+  }
   Future fillUserInfo() async {
     // fill textformfields with cached user
     final user = _userService.user!;
