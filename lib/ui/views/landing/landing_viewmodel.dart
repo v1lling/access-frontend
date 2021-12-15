@@ -5,6 +5,7 @@ import 'package:access/app/locator.dart';
 import 'package:access/services/access_backend_service.dart';
 import 'package:access/services/uri_routing_service.dart';
 import 'package:access/services/user_service.dart';
+import 'package:access/ui/widgets/panel_error.dart';
 import 'package:access/ui/widgets/panel_usercount.dart';
 import 'package:flutter/material.dart';
 import 'package:access/ui/widgets/panel_scan.dart';
@@ -26,6 +27,12 @@ class LandingViewModel extends BaseViewModel {
 
   LandingViewModel() {
     checkNFCPermissions();
+    /*
+    NfcManager.instance.discover(onDiscovered: (NfcTag tag) async {
+      String? roomId = await _getUriStringFromTag(tag);
+      if (roomId != null) uriRoutingService.navigateFromUri(roomId);
+    });
+    */
   }
 
   void checkNFCPermissions() {
@@ -46,7 +53,8 @@ class LandingViewModel extends BaseViewModel {
       if (roomId != null) uriRoutingService.navigateFromUri(roomId);
     }, onError: (NfcError error) async {
       print(error);
-      panelController.close();
+      panelContent = PanelError();
+      notifyListeners();
       checkNFCPermissions(); // in case permissions are the problem (prompt denied)
     });
   }
@@ -56,20 +64,23 @@ class LandingViewModel extends BaseViewModel {
     notifyListeners();
     panelController.open();
 
-    NfcManager.instance.startSession(
-      onDiscovered: (NfcTag tag) async {
-        notifyListeners();
-        String? uriString = await _getUriStringFromTag(tag);
-        if (uriString != null) {
-          String? roomId = _getRoomIdFromUriString(uriString);
-          if (roomId != null) {
-            var userCount = await _accessBackendService.checkInCount(roomId);
-            panelContent = PanelUserCount(roomId: roomId, userCount: userCount);
-            notifyListeners();
-          }
+    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+      notifyListeners();
+      String? uriString = await _getUriStringFromTag(tag);
+      if (uriString != null) {
+        String? roomId = _getRoomIdFromUriString(uriString);
+        if (roomId != null) {
+          var userCount = await _accessBackendService.checkInCount(roomId);
+          panelContent = PanelUserCount(roomId: roomId, userCount: userCount);
+          notifyListeners();
         }
-      },
-    );
+      }
+    }, onError: (NfcError error) async {
+      print(error);
+      panelContent = PanelError();
+      notifyListeners();
+      checkNFCPermissions(); // in case permissions are the problem (prompt denied)
+    });
   }
 
   void writeNFC(String? roomId) {
@@ -81,19 +92,22 @@ class LandingViewModel extends BaseViewModel {
       Ndef? tech = await Ndef.from(tag);
       if (tech is Ndef) {
         final url = Uri.parse("https://access.netpy.de/checkin?room=" + roomId);
-        //final record = NdefRecord.createUri(url);
+        final record = NdefRecord.createUri(url);
         //final record = NdefRecord.createMime("text/json", Uint8List.fromList("lol".codeUnits));
         //final record =
         //  NdefRecord.createText("Was geht mein Kamerad", languageCode: "de");
-        final record = NdefRecord.createExternal("sascha", "schnipi",
-            Uint8List.fromList("hey schnippschnapp".codeUnits));
-
+        //final record = NdefRecord.createExternal("sascha", "schnipi",Uint8List.fromList("hey schnippschnapp".codeUnits));
         final message = NdefMessage([record]);
 
         await tech.write(message);
         panelContent = PanelSuccess();
         notifyListeners();
       }
+    }, onError: (NfcError error) async {
+      print(error);
+      panelContent = PanelError();
+      notifyListeners();
+      checkNFCPermissions(); // in case permissions are the problem (prompt denied)
     });
   }
 
@@ -103,8 +117,6 @@ class LandingViewModel extends BaseViewModel {
       // find ndef record for navigation
       if (tech.cachedMessage != null) {
         for (NdefRecord record in tech.cachedMessage!.records) {
-          print(utf8.decode(record.type));
-          print(utf8.decode(record.payload));
           if (utf8.decode(record.type) == "U") {
             String targetUri = utf8.decode(record.payload);
             return targetUri;

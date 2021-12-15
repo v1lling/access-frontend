@@ -66,21 +66,22 @@ class AccessApp extends StatelessWidget {
                   return Consumer<ThemeService>(
                     builder: (context, notifire, child) {
                       return MaterialApp(
-                          locale: localeService.locale,
-                          supportedLocales: L10n.all,
-                          localizationsDelegates: [
-                            AppLocalizations.delegate,
-                            GlobalMaterialLocalizations.delegate,
-                            GlobalCupertinoLocalizations.delegate,
-                            GlobalWidgetsLocalizations.delegate
-                          ],
-                          title: 'Access',
-                          theme: notifire.getTheme(),
-                          initialRoute: "/",
-                          navigatorKey: navigatorKey,
-                          onGenerateRoute: uriRoutingService.generateRoute,
-                          home: uriRoutingService.getViewFromUriString(
-                              initialLink ?? linkSnapshot.data.toString()));
+                        locale: localeService.locale,
+                        supportedLocales: L10n.all,
+                        localizationsDelegates: [
+                          AppLocalizations.delegate,
+                          GlobalMaterialLocalizations.delegate,
+                          GlobalCupertinoLocalizations.delegate,
+                          GlobalWidgetsLocalizations.delegate
+                        ],
+                        title: 'Access',
+                        theme: notifire.getTheme(),
+                        initialRoute: "/",
+                        navigatorKey: navigatorKey,
+                        onGenerateRoute: uriRoutingService.generateRoute,
+                        //  home: uriRoutingService.getViewFromUriString(
+                        //    initialLink ?? linkSnapshot.data.toString(),),
+                      );
                     },
                   );
                 }

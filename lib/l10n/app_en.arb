@@ -8,6 +8,8 @@
     "usercount": "persons checked-in",
     "create_nfc_tag": "Create NFC-Tag",
     "get_checkins": "Number of Attendees",
+    "nfc_error1": "Something went wrong.",
+    "nfc_error2": "Please try again.",
 
     "userinfo_title": "Contact details",
     "userinfo_enter": "Enter your contact details",

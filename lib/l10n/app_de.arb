@@ -10,6 +10,8 @@
     "usercount": "Personen eingecheckt",
     "create_nfc_tag": "Erstelle NFC-Tag",
     "get_checkins": "Anzahl der Anwesenden",
+    "nfc_error1": "Etwas ist schief gegangen.",
+    "nfc_error2": "Bitte versuchen Sie er erneut.",
 
     "userinfo_title": "Kontaktdaten",
     "userinfo_enter": "Bitte geben Sie ihre Kontaktdaten an",
