@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:access/app/locator.dart';
 import 'package:access/l10n/l10n.dart';
+import 'package:access/services/access_router_service.dart';
 import 'package:access/services/locale_service.dart';
 import 'package:access/services/theme_service.dart';
 import 'package:access/services/uri_routing_service.dart';
@@ -49,6 +50,7 @@ Future main() async {
 class AccessApp extends StatelessWidget {
   final userService = locator<UserService>();
   final uriRoutingService = locator<UriRoutingService>();
+  final accessRouterService = locator<AccessRouterService>();
 
   AccessApp(this.initialLink);
   final String? initialLink;
@@ -56,6 +58,8 @@ class AccessApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localeService = Provider.of<LocaleService>(context);
+    accessRouterService.setupRouter();
+    print("setup");
     return StreamBuilder(
         stream: kIsWeb ? null : linkStream,
         builder: (context, linkSnapshot) {
@@ -78,7 +82,8 @@ class AccessApp extends StatelessWidget {
                         theme: notifire.getTheme(),
                         initialRoute: "/",
                         navigatorKey: navigatorKey,
-                        onGenerateRoute: uriRoutingService.generateRoute,
+                        //onGenerateRoute: uriRoutingService.generateRoute,
+                        onGenerateRoute: accessRouterService.router.generator,
                         //  home: uriRoutingService.getViewFromUriString(
                         //    initialLink ?? linkSnapshot.data.toString(),),
                       );
