@@ -1,5 +1,4 @@
 import 'package:access/ui/views/checkin/checkin_viewmodel.dart';
-import 'package:access/ui/views/landing/landing_view.dart';
 import 'package:animated_check/animated_check.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckInView extends StatefulWidget {
   final String? roomId;
+  static const valueKey = ValueKey("Checkin");
   CheckInView({String? roomId}) : roomId = roomId;
   @override
   _CheckInViewState createState() => new _CheckInViewState(roomId);
@@ -55,8 +55,7 @@ class _CheckInViewState extends State<CheckInView>
                                     icon: Icon(Icons.arrow_back),
                                     color: Colors.white,
                                     onPressed: () {
-                                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => LandingView()));
+                                      Navigator.of(context).pop();
                                     }),
                               ),
                               Padding(
@@ -130,19 +129,19 @@ class _CheckInViewState extends State<CheckInView>
                                                       CrossAxisAlignment.end,
                                                   children: [
                                                     Text(
-                                                        model.userService.user!
-                                                                .givenname ??
-                                                            "Unknown",
-                                                        style: Theme
-                                                                .of(context)
+                                                        model.user.givenname
+                                                                .isNotEmpty
+                                                            ? model
+                                                                .user.givenname
+                                                            : "Unknown",
+                                                        style: Theme.of(context)
                                                             .textTheme
                                                             .bodyText2!
                                                             .copyWith(
                                                                 color: model
-                                                                            .userService
-                                                                            .user!
-                                                                            .givenname !=
-                                                                        null
+                                                                        .user
+                                                                        .givenname
+                                                                        .isNotEmpty
                                                                     ? Theme.of(
                                                                             context)
                                                                         .canvasColor
@@ -152,10 +151,9 @@ class _CheckInViewState extends State<CheckInView>
                                                     SizedBox(width: 4),
                                                     Icon(Icons.edit,
                                                         color: model
-                                                                    .userService
-                                                                    .user!
-                                                                    .givenname !=
-                                                                null
+                                                                .user
+                                                                .givenname
+                                                                .isNotEmpty
                                                             ? Theme.of(context)
                                                                 .canvasColor
                                                             : Theme.of(context)
@@ -246,25 +244,24 @@ class _CheckInViewState extends State<CheckInView>
                                               ),
                                               style: ButtonStyle(
                                                   foregroundColor:
-                                                      MaterialStateProperty.all<Color>(
-                                                          Colors.white),
-                                                  backgroundColor: model
-                                                              .userService.user!
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.white),
+                                                  backgroundColor: model.user
                                                               .isUserInfoComplete() &&
                                                           model
                                                               .isCheckoutTimeValid()
                                                       ? MaterialStateProperty.all<Color>(
                                                           Theme.of(context)
                                                               .highlightColor)
-                                                      : MaterialStateProperty.all<Color>(
-                                                          Colors.grey)),
-                                              onPressed: model.userService.user!
-                                                      .isUserInfoComplete()
-                                                  ? () {
-                                                      model.checkInUser(
-                                                          _animationController);
-                                                    }
-                                                  : null),
+                                                      : MaterialStateProperty.all<
+                                                          Color>(Colors.grey)),
+                                              onPressed:
+                                                  model.user.isUserInfoComplete()
+                                                      ? () {
+                                                          model.checkInUser(
+                                                              _animationController);
+                                                        }
+                                                      : null),
                                         ),
                                       ),
                                     )

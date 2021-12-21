@@ -4,16 +4,25 @@ import 'package:access/models/user.dart';
 import 'package:faker_dart/faker_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:faker_dart/src/utils/locale_utils.dart';
+import 'package:stacked/stacked.dart';
 
-class UserService {
-  User? user = User.empty();
+class UserService with ReactiveServiceMixin {
+  ReactiveValue<User> _user = ReactiveValue<User>(User.empty());
   final faker = Faker.instance;
+
+  ReactiveValue<User> get user => _user;
+
+  UserService() {
+    listenToReactiveValues([user]);
+    initializeUserService();
+  }
 
   Future<bool> initializeUserService() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userJson = await prefs.getString("userinfo");
     if (userJson != null) {
-      this.user = User.fromJson(json.decode(userJson));
+      var user = User.fromJson(json.decode(userJson));
+      this._user.value = user;
       return true;
     } else {
       faker.setLocale(FakerLocaleType.de);
@@ -35,10 +44,7 @@ class UserService {
   Future<bool> saveUser(User user) async {
     final prefs = await SharedPreferences.getInstance();
     var boolSaved = await prefs.setString("userinfo", json.encode(user));
-    if (boolSaved) this.user = user;
+    if (boolSaved) this._user.value = user;
     return boolSaved;
   }
-
-  @override
-  List<Object> get props => [user!];
 }

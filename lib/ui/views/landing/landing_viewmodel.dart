@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:access/app/locator.dart';
+import 'package:access/models/user.dart';
 import 'package:access/services/access_backend_service.dart';
 import 'package:access/services/uri_routing_service.dart';
 import 'package:access/services/user_service.dart';
@@ -14,8 +14,14 @@ import 'package:nfc_manager/nfc_manager.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stacked/stacked.dart';
 
-class LandingViewModel extends BaseViewModel {
+class LandingViewModel extends ReactiveViewModel {
   UserService userService = locator<UserService>();
+  StreamSubscription<User>? userStreamSub;
+  User user = User.empty();
+
+  @override
+  List<ReactiveServiceMixin> get reactiveServices => [userService];
+
   UriRoutingService uriRoutingService = locator<UriRoutingService>();
   final AccessBackendService _accessBackendService =
       locator<AccessBackendService>();
@@ -27,6 +33,10 @@ class LandingViewModel extends BaseViewModel {
 
   LandingViewModel() {
     checkNFCPermissions();
+    this.user = userService.user.value;
+    userStreamSub = userService.user.listen((v) {
+      this.user = v;
+    });
     /*
     NfcManager.instance.discover(onDiscovered: (NfcTag tag) async {
       String? roomId = await _getUriStringFromTag(tag);
@@ -35,22 +45,37 @@ class LandingViewModel extends BaseViewModel {
     */
   }
 
+  @override
+  void dispose() {
+    userStreamSub?.cancel();
+    super.dispose();
+  }
+
   void checkNFCPermissions() {
     NfcManager.instance.isAvailable().then((isAvailable) {
-      this.isNfcAvailable = isAvailable;
+      this.isNfcAvailable = true; // isAvailable;
       notifyListeners();
     });
   }
 
-  void activateNFCCheckin() {
+  void activateNFCCheckin(ValueChanged<String>? didCheckInScan) {
     panelContent = PanelScan();
     notifyListeners();
     panelController.open();
 
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      panelController.close();
-      String? roomId = await _getUriStringFromTag(tag);
-      if (roomId != null) uriRoutingService.navigateFromUri(roomId);
+      String? uriString = await _getUriStringFromTag(tag);
+      if (uriString != null) {
+        String? roomId = _getRoomIdFromUriString(uriString);
+        bool isExisting = await _accessBackendService.getIsRoomExisting(roomId);
+        if (roomId != null && isExisting) {
+          didCheckInScan?.call(roomId);
+          panelController.close();
+        } else {
+          panelContent = PanelError();
+          notifyListeners();
+        }
+      }
     }, onError: (NfcError error) async {
       print(error);
       panelContent = PanelError();
@@ -69,9 +94,13 @@ class LandingViewModel extends BaseViewModel {
       String? uriString = await _getUriStringFromTag(tag);
       if (uriString != null) {
         String? roomId = _getRoomIdFromUriString(uriString);
-        if (roomId != null) {
+        bool isExisting = await _accessBackendService.getIsRoomExisting(roomId);
+        if (roomId != null && isExisting) {
           var userCount = await _accessBackendService.checkInCount(roomId);
           panelContent = PanelUserCount(roomId: roomId, userCount: userCount);
+          notifyListeners();
+        } else {
+          panelContent = PanelError();
           notifyListeners();
         }
       }
@@ -91,15 +120,15 @@ class LandingViewModel extends BaseViewModel {
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       Ndef? tech = await Ndef.from(tag);
       if (tech is Ndef) {
-        final url = Uri.parse("https://access.netpy.de/checkin?room=" + roomId);
+        final url = Uri.parse("https://access.netpy.de/checkin/" + roomId);
         final record = NdefRecord.createUri(url);
         //final record = NdefRecord.createMime("text/json", Uint8List.fromList("lol".codeUnits));
         //final record =
         //  NdefRecord.createText("Was geht mein Kamerad", languageCode: "de");
         //final record = NdefRecord.createExternal("sascha", "schnipi",Uint8List.fromList("hey schnippschnapp".codeUnits));
         final message = NdefMessage([record]);
-
         await tech.write(message);
+        await _accessBackendService.createRoom(roomId);
         panelContent = PanelSuccess();
         notifyListeners();
       }
@@ -128,8 +157,12 @@ class LandingViewModel extends BaseViewModel {
   }
 
   String? _getRoomIdFromUriString(String? uriString) {
-    if (uriString == null) return null;
-    Uri targetUri = Uri.dataFromString(uriString);
-    return targetUri.queryParameters["room"];
+    final uri = Uri.parse(uriString!);
+    if (uri.pathSegments.length != 3) return null;
+    final pageName = uri.pathSegments.elementAt(1).toString();
+    if (pageName == "checkin") {
+      return uri.pathSegments.elementAt(2).toString();
+    }
+    return null;
   }
 }

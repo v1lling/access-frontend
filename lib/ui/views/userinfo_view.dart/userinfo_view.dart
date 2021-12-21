@@ -1,5 +1,4 @@
 import 'package:access/services/locale_service.dart';
-import 'package:access/ui/views/landing/landing_view.dart';
 import 'package:access/ui/views/userinfo_view.dart/userinfo_viewmodel.dart';
 import 'package:access/validators/userinfo_validators.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserInfoView extends StatelessWidget {
+  static const valueKey = ValueKey("User");
   static final _formKey = GlobalKey<FormState>();
   final double paddingBetweenTextFields = 15;
   @override
@@ -270,11 +270,7 @@ class UserInfoView extends StatelessWidget {
                                                 AppLocalizations.of(context)!
                                                     .cancel),
                                             onPressed: () {
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              LandingView()));
+                                              Navigator.of(context).pop();
                                             }),
                                       ),
                                       Padding(

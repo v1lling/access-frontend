@@ -2,18 +2,18 @@ import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
   User(
-      {this.givenname,
-      this.familyname,
-      this.street,
-      this.postalcode,
-      this.town,
-      this.mobilenumber});
-  final String? givenname;
-  final String? familyname;
-  final String? street;
-  final String? postalcode;
-  final String? town;
-  final String? mobilenumber;
+      {this.givenname = "",
+      this.familyname = "",
+      this.street = "",
+      this.postalcode = "",
+      this.town = "",
+      this.mobilenumber = ""});
+  final String givenname;
+  final String familyname;
+  final String street;
+  final String postalcode;
+  final String town;
+  final String mobilenumber;
 
   factory User.fromJson(Map<String, dynamic> json) {
     if (json.isEmpty) return User();
@@ -46,15 +46,15 @@ class User extends Equatable {
       };
 
   bool isUserInfoComplete() {
-    return givenname != null &&
-        familyname != null &&
-        street != null &&
-        postalcode != null &&
-        town != null &&
-        mobilenumber != null;
+    return givenname.isNotEmpty &&
+        familyname.isNotEmpty &&
+        street.isNotEmpty &&
+        postalcode.isNotEmpty &&
+        town.isNotEmpty &&
+        mobilenumber.isNotEmpty;
   }
 
   @override
   List<Object> get props =>
-      [givenname!, familyname!, street!, postalcode!, town!, mobilenumber!];
+      [givenname, familyname, street, postalcode, town, mobilenumber];
 }

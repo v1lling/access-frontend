@@ -1,5 +1,4 @@
 import 'package:access/ui/views/landing/landing_viewmodel.dart';
-import 'package:access/ui/views/userinfo_view.dart/userinfo_view.dart';
 import 'package:access/ui/widgets/landing_action.dart';
 import 'package:access/ui/widgets/prompt_dialog.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,12 @@ import 'package:stacked/stacked.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LandingView extends StatelessWidget {
+  static const valueKey = ValueKey("Landing");
+  final ValueChanged<String>? onCheckinScanned;
+  final Function? onUserTapped;
+
+  LandingView({Key? key, this.onCheckinScanned, this.onUserTapped})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -29,22 +34,15 @@ class LandingView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                  model.userService.user!.isUserInfoComplete()
-                                      ? "Hi, " +
-                                          model.userService.user!.givenname! +
-                                          "!"
+                                  model.user.isUserInfoComplete()
+                                      ? "Hi, " + model.user.givenname + "!"
                                       : AppLocalizations.of(context)!
                                           .userinfo_enter,
                                   style: Theme.of(context).textTheme.headline2),
                               IconButton(
                                   icon: Icon(Icons.edit,
                                       size: 20, color: Colors.white),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                UserInfoView()));
-                                  })
+                                  onPressed: () => onUserTapped?.call())
                             ],
                           )),
                       Expanded(
@@ -103,7 +101,8 @@ class LandingView extends StatelessWidget {
                                       LandingActionButton(
                                           title: "Check-In",
                                           icon: Icons.check,
-                                          onTap: model.activateNFCCheckin),
+                                          onTap: () => model.activateNFCCheckin(
+                                              onCheckinScanned)),
                                       SizedBox(height: 8),
                                       Divider(
                                         thickness: 1,
@@ -154,5 +153,3 @@ class LandingView extends StatelessWidget {
         viewModelBuilder: () => LandingViewModel());
   }
 }
-
-class LandingAction {}

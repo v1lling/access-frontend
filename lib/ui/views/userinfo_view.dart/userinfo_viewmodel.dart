@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:access/app/locator.dart';
 import 'package:access/models/user.dart';
 import 'package:access/services/user_service.dart';
@@ -6,6 +8,7 @@ import 'package:stacked/stacked.dart';
 
 class UserInfoViewModel extends BaseViewModel {
   final UserService _userService = locator<UserService>();
+  StreamSubscription<User>? userStreamSub;
 
   final givennameController = TextEditingController();
   final familynameController = TextEditingController();
@@ -13,19 +16,27 @@ class UserInfoViewModel extends BaseViewModel {
   final postalcodeController = TextEditingController();
   final townController = TextEditingController();
   final mobilenumberController = TextEditingController();
+
   UserInfoViewModel() {
-    fillUserInfo();
+    userStreamSub = _userService.user.listen((user) {
+      fillUserInfo(user);
+    });
   }
-  Future fillUserInfo() async {
+
+  @override
+  void dispose() {
+    userStreamSub?.cancel();
+    super.dispose();
+  }
+
+  Future fillUserInfo(User user) async {
     // fill textformfields with cached user
-    final user = _userService.user!;
-    if (user.givenname != null) givennameController.text = user.givenname!;
-    if (user.familyname != null) familynameController.text = user.familyname!;
-    if (user.street != null) streetController.text = user.street!;
-    if (user.postalcode != null) postalcodeController.text = user.postalcode!;
-    if (user.town != null) townController.text = user.town!;
-    if (user.mobilenumber != null)
-      mobilenumberController.text = user.mobilenumber!;
+    givennameController.text = user.givenname;
+    familynameController.text = user.familyname;
+    streetController.text = user.street;
+    postalcodeController.text = user.postalcode;
+    townController.text = user.town;
+    mobilenumberController.text = user.mobilenumber;
     return;
   }
 
