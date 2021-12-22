@@ -7,6 +7,7 @@ import 'package:access/services/uri_routing_service.dart';
 import 'package:access/services/user_service.dart';
 import 'package:access/ui/widgets/panel_error.dart';
 import 'package:access/ui/widgets/panel_usercount.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:access/ui/widgets/panel_scan.dart';
 import 'package:access/ui/widgets/panel_success.dart';
@@ -88,7 +89,6 @@ class LandingViewModel extends ReactiveViewModel {
     panelContent = PanelScan();
     notifyListeners();
     panelController.open();
-
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       notifyListeners();
       String? uriString = await _getUriStringFromTag(tag);
@@ -147,7 +147,14 @@ class LandingViewModel extends ReactiveViewModel {
       if (tech.cachedMessage != null) {
         for (NdefRecord record in tech.cachedMessage!.records) {
           if (utf8.decode(record.type) == "U") {
-            String targetUri = utf8.decode(record.payload);
+            String targetUri;
+            if (kIsWeb) {
+              // URI PREFIX already decoded from Web NFC by default
+              targetUri = utf8.decode(record.payload);
+            } else {
+              targetUri = NdefRecord.URI_PREFIX_LIST[record.payload[0]] +
+                  utf8.decode(record.payload.sublist(1));
+            }
             return targetUri;
           }
         }
@@ -158,10 +165,10 @@ class LandingViewModel extends ReactiveViewModel {
 
   String? _getRoomIdFromUriString(String? uriString) {
     final uri = Uri.parse(uriString!);
-    if (uri.pathSegments.length != 3) return null;
-    final pageName = uri.pathSegments.elementAt(1).toString();
+    if (uri.pathSegments.length != 2) return null;
+    final pageName = uri.pathSegments.elementAt(0).toString();
     if (pageName == "checkin") {
-      return uri.pathSegments.elementAt(2).toString();
+      return uri.pathSegments.elementAt(1).toString();
     }
     return null;
   }
