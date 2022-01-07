@@ -8,7 +8,7 @@ class AccessBackendService {
   Map<String, String> headers = {"Content-Type": "application/json"};
 
   Future<bool> createRoom(String roomId) async {
-    final response = await http.post(Uri.https(baseUrl, 'access/createroom'),
+    final response = await http.put(Uri.https(baseUrl, 'access/createroom'),
         body: jsonEncode({"roomId": roomId}), headers: headers);
     if (response.statusCode == 200) {
       return true;
@@ -37,7 +37,7 @@ class AccessBackendService {
         roomId: roomId,
         checkin: DateTime.now(),
         checkout: checkoutTime);
-    final response = await http.post(Uri.https(baseUrl, 'access/checkin'),
+    final response = await http.put(Uri.https(baseUrl, 'access/checkin'),
         body: jsonEncode(checkin.toJson()), headers: headers);
     if (response.statusCode == 200) {
       return json.decode(response.body)["usercount"];
@@ -45,6 +45,11 @@ class AccessBackendService {
       print("Something went wrong");
       return -1;
     }
+  }
+
+  Future<void> sendFeedback(dynamic feedback) async {
+    final response = await http.put(Uri.https(baseUrl, 'access/feedback'),
+        body: jsonEncode(feedback), headers: headers);
   }
 
   Future<int> checkInCount(String roomId) async {

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:access/app/locator.dart';
 import 'package:access/models/user.dart';
 import 'package:access/services/access_backend_service.dart';
-import 'package:access/services/uri_routing_service.dart';
 import 'package:access/services/user_service.dart';
 import 'package:access/ui/widgets/panel_error.dart';
 import 'package:access/ui/widgets/panel_usercount.dart';
@@ -23,7 +22,6 @@ class LandingViewModel extends ReactiveViewModel {
   @override
   List<ReactiveServiceMixin> get reactiveServices => [userService];
 
-  UriRoutingService uriRoutingService = locator<UriRoutingService>();
   final AccessBackendService _accessBackendService =
       locator<AccessBackendService>();
 
@@ -54,7 +52,7 @@ class LandingViewModel extends ReactiveViewModel {
 
   void checkNFCPermissions() {
     NfcManager.instance.isAvailable().then((isAvailable) {
-      this.isNfcAvailable = true; // isAvailable;
+      this.isNfcAvailable = isAvailable;
       notifyListeners();
     });
   }
@@ -142,20 +140,16 @@ class LandingViewModel extends ReactiveViewModel {
 
   Future<String?> _getUriStringFromTag(NfcTag tag) async {
     Ndef? tech = await Ndef.from(tag);
-    if (tech is Ndef) {
-      // find ndef record for navigation
-      if (tech.cachedMessage != null) {
-        for (NdefRecord record in tech.cachedMessage!.records) {
-          if (utf8.decode(record.type) == "U") {
-            String targetUri;
-            if (kIsWeb) {
-              // URI PREFIX already decoded from Web NFC by default
-              targetUri = utf8.decode(record.payload);
-            } else {
-              targetUri = NdefRecord.URI_PREFIX_LIST[record.payload[0]] +
-                  utf8.decode(record.payload.sublist(1));
-            }
-            return targetUri;
+    if (tech is Ndef && tech.cachedMessage != null) {
+      for (NdefRecord record in tech.cachedMessage!.records) {
+        if (utf8.decode(record.type) == "U") {
+          if (kIsWeb) {
+            // URI prefix already decoded from Web NFC by default
+            return utf8.decode(record.payload);
+          } else {
+            // URI prefix needs to be decoded first
+            return NdefRecord.URI_PREFIX_LIST[record.payload[0]] +
+                utf8.decode(record.payload.sublist(1));
           }
         }
       }
