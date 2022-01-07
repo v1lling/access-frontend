@@ -16,6 +16,10 @@
     "userinfo_title": "Kontaktdaten",
     "userinfo_enter": "Bitte geben Sie ihre Kontaktdaten an",
 
+    "feedback_title": "Feedback",
+    "device": "Smartphone",
+    "send": "Send",
+
     "userinfo": "Kontaktdaten:",
     "givenname": "Vorname",
     "familyname": "Nachname",

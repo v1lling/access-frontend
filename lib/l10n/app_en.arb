@@ -14,6 +14,9 @@
     "userinfo_title": "Contact details",
     "userinfo_enter": "Enter your contact details",
 
+    "feedback_title": "Feedback",
+    "device": "Smartphone",
+    "send": "Send",
 
     "userinfo": "Contact details:",
     "givenname": "Given name",

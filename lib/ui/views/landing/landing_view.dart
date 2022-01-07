@@ -1,3 +1,4 @@
+import 'package:access/ui/views/feedback/feedback_view.dart';
 import 'package:access/ui/views/landing/landing_viewmodel.dart';
 import 'package:access/ui/widgets/landing_action.dart';
 import 'package:access/ui/widgets/prompt_dialog.dart';
@@ -103,21 +104,21 @@ class LandingView extends StatelessWidget {
                                           icon: Icons.check,
                                           onTap: () => model.activateNFCCheckin(
                                               onCheckinScanned)),
-                                      SizedBox(height: 8),
+                                      SizedBox(height: 2),
                                       Divider(
                                         thickness: 1,
                                       ),
-                                      SizedBox(height: 8),
+                                      SizedBox(height: 2),
                                       LandingActionButton(
                                           title: AppLocalizations.of(context)!
                                               .get_checkins,
                                           icon: Icons.people_sharp,
                                           onTap: model.activateNFCCount),
-                                      SizedBox(height: 8),
+                                      SizedBox(height: 2),
                                       Divider(
                                         thickness: 1,
                                       ),
-                                      SizedBox(height: 8),
+                                      SizedBox(height: 2),
                                       LandingActionButton(
                                           title: AppLocalizations.of(context)!
                                               .create_nfc_tag,
@@ -141,6 +142,24 @@ class LandingView extends StatelessWidget {
                                             );
                                             model.writeNFC(roomId);
                                           }),
+                                      SizedBox(height: 2),
+                                      Divider(
+                                        thickness: 1,
+                                      ),
+                                      SizedBox(height: 2),
+                                      LandingActionButton(
+                                          title: AppLocalizations.of(context)!
+                                              .feedback_title,
+                                          icon: Icons.comment,
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      FeedBackView()),
+                                            );
+                                          }),
+                                      SizedBox(height: 2),
                                     ],
                                   ),
                                 )),
